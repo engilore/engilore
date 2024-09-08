@@ -22,7 +22,7 @@ urlpatterns = [
     path('<int:pk>/edit/', CategoryUpdateView.as_view(), name='category-update'),
     path('<int:pk>/delete/', CategoryDeleteView.as_view(), name='category-delete'),
 
-    path('topics/', TopicListView.as_view(), name='topic-list'),
+    path('topic/', TopicListView.as_view(), name='topic-list'),
     path('topic/create/', TopicCreateView.as_view(), name='topic-create'),
     path('topic/<int:pk>/', TopicDetailView.as_view(), name='topic-detail'),
     path('topic/<int:pk>/edit/', TopicUpdateView.as_view(), name='topic-update'),

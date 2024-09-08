@@ -17,14 +17,14 @@ from blog.views.draft.view import (
 
 
 urlpatterns = [
-    path('posts/', PostListView.as_view(), name='post-list'),
+    path('post/', PostListView.as_view(), name='post-list'),
     path('post/create/', PostCreateView.as_view(), name='post-create'),
     path('post/<int:id>/', PostDetailView.as_view(), name='post-detail'),
-    path('posts/<int:id>/edit/', PostUpdateView.as_view(), name='post-update'),
-    path('posts/<int:id>/delete/', PostDeleteView.as_view(), name='post-delete'),
+    path('post/<int:id>/edit/', PostUpdateView.as_view(), name='post-update'),
+    path('post/<int:id>/delete/', PostDeleteView.as_view(), name='post-delete'),
 
-    path('posts/drafts/', PostDraftListView.as_view(), name='post-draft-list'),
-    path('posts/draft/<int:id>/', PostDraftDetailView.as_view(), name='post-draft-detail'),
-    path('posts/drafts/<int:id>/edit/', PostDraftUpdateView.as_view(), name='post-draft-update'),
-    path('posts/drafts/<int:id>/delete/', PostDraftDeleteView.as_view(), name='post-draft-delete'),
+    path('post/draft/', PostDraftListView.as_view(), name='post-draft-list'),
+    path('post/draft/<int:id>/', PostDraftDetailView.as_view(), name='post-draft-detail'),
+    path('post/draft/<int:id>/edit/', PostDraftUpdateView.as_view(), name='post-draft-update'),
+    path('post/draft/<int:id>/delete/', PostDraftDeleteView.as_view(), name='post-draft-delete'),
 ]
