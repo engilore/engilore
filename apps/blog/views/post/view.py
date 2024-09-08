@@ -1,7 +1,9 @@
+from django.http import Http404
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import AllowAny
 
 from account.permissions import IsAdminOrGuardian
 from blog.models import Post
@@ -14,89 +16,92 @@ class PostCreateView(APIView):
     def post(self, request, format=None):
         serializer = PostSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(author=request.user)
             return Response({
                 'message': 'Post created successfully',
                 'data': serializer.data
             }, status=status.HTTP_201_CREATED)
-        
+
         return Response({
             'message': 'Post creation failed',
             'errors': serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
 
 
-class PostListView(ListAPIView):
-    queryset = Post.objects.filter(status='published')
-    serializer_class = PostSerializer
+class PostListView(APIView):
+    permission_classes = [AllowAny]
 
-    def list(self, request, *args, **kwargs):
-        response = super().list(request, *args, **kwargs)
-        response.data = {
+    def get(self, request, format=None):
+        posts = Post.objects.filter(status='published')
+        serializer = PostSerializer(posts, many=True)
+        return Response({
             'message': 'List of published posts',
-            'data': response.data
-        }
-        return response
-    
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
 
-class PostDetailView(RetrieveAPIView):
-    queryset = Post.objects.filter(status='published')
-    serializer_class = PostSerializer
-    lookup_field = 'slug'
 
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
+class PostDetailView(APIView):
+    permission_classes = [AllowAny]
+
+    def get_object(self, id):
+        try:
+            return Post.objects.get(id=id, status='published')
+        except Post.DoesNotExist:
+            raise Http404
+
+    def get(self, request, id, format=None):
+        post = self.get_object(id)
+        serializer = PostSerializer(post)
         return Response({
             'message': 'Post details retrieved successfully',
             'data': serializer.data
         }, status=status.HTTP_200_OK)
 
 
-class PostUpdateView(UpdateAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-    lookup_field = 'slug'
+class PostUpdateView(APIView):
     permission_classes = [IsAdminOrGuardian]
 
-    def get_queryset(self):
-        if self.request.user.is_admin:
-            return self.queryset
-        return self.queryset.filter(author=self.request.user)
+    def get_object(self, id, request):
+        try:
+            post = Post.objects.get(id=id)
+            if request.user.is_admin or post.author == request.user:
+                return post
+            else:
+                raise PermissionDenied("You do not have permission to edit this post.")
+        except Post.DoesNotExist:
+            raise Http404
 
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+    def put(self, request, id, format=None):
+        post = self.get_object(id, request)
+        serializer = PostSerializer(post, data=request.data, partial=True)
         if serializer.is_valid():
-            self.perform_update(serializer)
+            serializer.save()
             return Response({
                 'message': 'Post updated successfully',
                 'data': serializer.data
             }, status=status.HTTP_200_OK)
-        
         return Response({
             'message': 'Post update failed',
             'errors': serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
+    
 
-
-
-class PostDeleteView(DestroyAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-    lookup_field = 'slug'
+class PostDeleteView(APIView):
     permission_classes = [IsAdminOrGuardian]
 
-    def get_queryset(self):
-        if self.request.user.is_admin:
-            return self.queryset
-        return self.queryset.filter(author=self.request.user)
+    def get_object(self, id, request):
+        try:
+            post = Post.objects.get(id=id)
+            if request.user.is_admin or post.author == request.user:
+                return post
+            else:
+                raise PermissionDenied("You do not have permission to delete this post.")
+        except Post.DoesNotExist:
+            raise Http404
 
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
+    def delete(self, request, id, format=None):
+        post = self.get_object(id, request)
+        post.delete()
         return Response({
             'message': 'Post deleted successfully'
         }, status=status.HTTP_204_NO_CONTENT)
-

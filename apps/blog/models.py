@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.utils.text import slugify
 
 from account.models import User
@@ -55,7 +56,9 @@ class Post(models.Model):
     type = models.CharField(
         max_length=10,
         choices=POST_TYPE,
-        default='journal'
+        default='journal',
+        null=False,
+        blank=False
         )
     meta_title = models.CharField(
         max_length=255,
@@ -89,7 +92,15 @@ class Post(models.Model):
     
     def _generate_slug(self):
         if not self.slug:
-            self.slug = slugify(self.title)
+            original_slug = slugify(self.title)
+            slug = original_slug
+            count = 1
+
+            while Post.objects.filter(slug=slug).exists():
+                slug = f'{original_slug}-{count}'
+                count += 1
+
+            self.slug = slug
 
     def _generate_meta_title(self):
         if not self.meta_title:
@@ -104,6 +115,10 @@ class Post(models.Model):
         self._generate_slug()
         self._generate_meta_title()
         self._generate_meta_description()
+
+        if self.status == 'published' and self.published_at is None:
+            self.published_at = timezone.now()
+
         super().save(*args, **kwargs)
     
     def __str__(self):
