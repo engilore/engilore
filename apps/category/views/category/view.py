@@ -25,7 +25,7 @@ class CategoryCreateView(APIView):
     def post(self, request, format=None):
         serializer = CategorySerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(created_by=request.user)
             return Response({
                 'message': 'Category created successfully',
                 'data': serializer.data

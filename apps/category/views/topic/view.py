@@ -26,7 +26,7 @@ class TopicCreateView(APIView):
     def post(self, request, format=None):
         serializer = TopicSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(created_by=request.user)
             return Response({
                 'message': 'Topic created successfully',
                 'data': serializer.data
