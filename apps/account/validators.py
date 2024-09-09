@@ -33,7 +33,7 @@ def validate_password(password):
     if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
         raise ValidationError("Password must contain at least one special character.")
 
-    return True
+    return password
 
 
 def capitalize_name(name):

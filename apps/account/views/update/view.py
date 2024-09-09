@@ -13,7 +13,7 @@ class UpdateUserView(APIView):
         user = request.user
         data = request.data.copy()
 
-        sensitive_fields = ['password', 'email']
+        sensitive_fields = ['new_password', 'email']
         updating_sensitive = any(field in data for field in sensitive_fields)
 
         if updating_sensitive:
@@ -34,12 +34,12 @@ class UpdateUserView(APIView):
             new_password = request.data.get('new_password')
             if new_password:
                 user.set_password(new_password)
-                user.save()
 
         serializer = UserSerializer(user, data=data, partial=True)
 
         if serializer.is_valid():
             serializer.save()
+            user.save()
             return Response(
                 {"success": "Profile updated successfully."},
                 status=status.HTTP_200_OK

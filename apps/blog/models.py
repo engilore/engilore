@@ -1,8 +1,10 @@
 from django.db import models
+from django.utils import timezone
 from django.utils.text import slugify
 
 from account.models import User
 from category.models import Category, Topic
+from blog.validators import capitalize_words
 from blog.constants import POST_STATUS, POST_TYPE
 
 
@@ -18,6 +20,11 @@ class Post(models.Model):
         null=False,
         blank=True
         )
+    volume = models.CharField(
+        max_length=10,
+        null=True,
+        blank=True,
+    )
     title = models.CharField(
         max_length=255,
         null=False,
@@ -55,7 +62,9 @@ class Post(models.Model):
     type = models.CharField(
         max_length=10,
         choices=POST_TYPE,
-        default='journal'
+        default='journal',
+        null=False,
+        blank=False
         )
     meta_title = models.CharField(
         max_length=255,
@@ -89,21 +98,39 @@ class Post(models.Model):
     
     def _generate_slug(self):
         if not self.slug:
-            self.slug = slugify(self.title)
+            original_slug = slugify(self.title)
+            if self.volume:
+                original_slug = f'{original_slug}-volume-{self.volume}'
+            
+            slug = original_slug
+            count = 1
+
+            while Post.objects.filter(slug=slug).exists():
+                slug = f'{original_slug}-{count}'
+                count += 1
+
+            self.slug = slug
 
     def _generate_meta_title(self):
         if not self.meta_title:
             self.meta_title = self.title
+            if self.volume:
+                self.meta_title = f'{self.meta_title} | Volume {self.volume}'
 
     def _generate_meta_description(self):
         if not self.meta_description:
             description_source = self.summary or self.content
             self.meta_description = description_source[:155] + '...' if len(description_source) > 155 else description_source
-
+        
     def save(self, *args, **kwargs):
+        self.title = capitalize_words(self.title)
         self._generate_slug()
         self._generate_meta_title()
         self._generate_meta_description()
+
+        if self.status == 'published' and self.published_at is None:
+            self.published_at = timezone.now()
+
         super().save(*args, **kwargs)
     
     def __str__(self):
