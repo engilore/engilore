@@ -7,7 +7,7 @@ from rest_framework.permissions import AllowAny
 
 from account.permissions import IsAdmin, IsAdminOrGuardian
 from category.models import Topic
-from category.views.topic.serializer import TopicSerializer
+from category.views.serializer import TopicSerializer
 
 
 
@@ -24,17 +24,24 @@ class TopicCreateView(APIView):
     permission_classes = [IsAdminOrGuardian]
 
     def post(self, request, format=None):
-        serializer = TopicSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(created_by=request.user)
+            category_id = request.data.get('category')
+            if not category_id:
+                return Response({
+                    'message': 'Category is required',
+                    'errors': 'No category ID provided'
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            serializer = TopicSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save(created_by=request.user)
+                return Response({
+                    'message': 'Topic created successfully',
+                    'data': serializer.data
+                }, status=status.HTTP_201_CREATED)
             return Response({
-                'message': 'Topic created successfully',
-                'data': serializer.data
-            }, status=status.HTTP_201_CREATED)
-        return Response({
-            'message': 'Topic creation failed',
-            'errors': serializer.errors
-        }, status=status.HTTP_400_BAD_REQUEST)
+                'message': 'Topic creation failed',
+                'errors': serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TopicDetailView(APIView):
@@ -64,6 +71,20 @@ class TopicUpdateView(APIView):
     def put(self, request, pk, format=None):
         topic = self.get_object(pk)
         serializer = TopicSerializer(topic, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                'message': 'Topic updated successfully',
+                'data': serializer.data
+            }, status=status.HTTP_200_OK)
+        return Response({
+            'message': 'Topic update failed',
+            'errors': serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, pk, format=None):
+        topic = self.get_object(pk)
+        serializer = TopicSerializer(topic, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({
