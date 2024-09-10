@@ -84,6 +84,7 @@ class Category(models.Model):
         verbose_name_plural = 'categories'
         indexes = [
             models.Index(fields=['slug']),
+            models.Index(fields=['name']),
         ]
 
 
@@ -173,4 +174,6 @@ class Topic(models.Model):
         verbose_name_plural = 'topics'
         indexes = [
             models.Index(fields=['slug']),
+            models.Index(fields=['name']),
+            models.Index(fields=['category_id']),
         ]
