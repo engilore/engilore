@@ -7,6 +7,7 @@ POST_STATUS = [
 POST_TYPE = [
     ('journal', 'Journal'),
     ('opinion', 'Opinion'),
+    ('memoir', 'Memoir'),
     ('novel', 'Novel'),
     ('story', 'Story'),
     ('poem', 'Poem'),
@@ -14,4 +15,11 @@ POST_TYPE = [
     ('research', 'Research'),
     ('thesis', 'Thesis'),
     ('tutorial', 'Tutorial'),
+    ('experiment', 'Experiment'),
+    ('lecture', 'Lecture'),
+    ('manifesto', 'Manifesto'),
+    ('critique', 'Critique'),
+    ('discussion', 'Discussion'),
+    ('review', 'Review'),
 ]
+

@@ -9,13 +9,16 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
+            'id',
             'email',
             'username',
             'password',
             'first_name',
             'last_name',
             'is_guardian',
-            'is_admin'
+            'is_admin',
+            'is_auxiliary',
+            'is_active',
         ]
         extra_kwargs = {
             'password': {'write_only': True},
@@ -34,24 +37,18 @@ class UserSerializer(serializers.ModelSerializer):
             data['first_name'] = capitalize_name(data['first_name'])
         if 'last_name' in data:
             data['last_name'] = capitalize_name(data['last_name'])
-
         return data
 
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data['password'])
-        
-        user = User.objects.create(
-            email=validated_data['email'],
-            username=validated_data['username'],
-            password=validated_data['password'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name']
-        )
-        return user
+        return User.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
+        if 'password' in validated_data:
+            validated_data['password'] = make_password(validated_data['password'])
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-        
         instance.save()
         return instance
+    
+

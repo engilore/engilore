@@ -2,7 +2,7 @@ from django.http import Http404
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 
 from account.permissions import IsAdmin, IsAdminOrGuardian
@@ -21,7 +21,7 @@ class TopicListView(APIView):
 
 
 class TopicCreateView(APIView):
-    permission_classes = [IsAdminOrGuardian]
+    permission_classes = [IsAuthenticated, IsAdminOrGuardian]
 
     def post(self, request, format=None):
             category_id = request.data.get('category')
@@ -60,7 +60,7 @@ class TopicDetailView(APIView):
 
 
 class TopicUpdateView(APIView):
-    permission_classes = [IsAdminOrGuardian]
+    permission_classes = [IsAuthenticated, IsAdminOrGuardian]
 
     def get_object(self, pk):
         try:
@@ -98,7 +98,7 @@ class TopicUpdateView(APIView):
 
 
 class TopicDeleteView(APIView):
-    permission_classes = [IsAdmin]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get_object(self, pk):
         try:

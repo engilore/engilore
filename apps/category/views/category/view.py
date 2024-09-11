@@ -2,7 +2,7 @@ from django.http import Http404
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from account.permissions import IsAdmin, IsAdminOrGuardian
 from category.models import Category
@@ -20,7 +20,7 @@ class CategoryListView(APIView):
 
 
 class CategoryCreateView(APIView):
-    permission_classes = [IsAdminOrGuardian]
+    permission_classes = [IsAuthenticated, IsAdminOrGuardian]
 
     def post(self, request, format=None):
         serializer = CategorySerializer(data=request.data)
@@ -52,7 +52,7 @@ class CategoryDetailView(APIView):
 
 
 class CategoryUpdateView(APIView):
-    permission_classes = [IsAdminOrGuardian]
+    permission_classes = [IsAuthenticated, IsAdminOrGuardian]
 
     def get_object(self, pk):
         try:

@@ -3,15 +3,15 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from account.permissions import IsAdminOrGuardian
 from blog.models import Post
-from blog.views.post.serializer import PostSerializer
+from blog.views.serializer import PostSerializer
 
 
 class PostCreateView(APIView):
-    permission_classes = [IsAdminOrGuardian]
+    permission_classes = [IsAuthenticated, IsAdminOrGuardian]
 
     def post(self, request, format=None):
         serializer = PostSerializer(data=request.data, context={'request': request})
@@ -47,7 +47,7 @@ class PostDetailView(APIView):
         try:
             return Post.objects.get(id=id, status='published')
         except Post.DoesNotExist:
-            raise Http404
+            raise Http404(f"Post with id {id} not found.")
 
     def get(self, request, id, format=None):
         post = self.get_object(id)
@@ -59,7 +59,7 @@ class PostDetailView(APIView):
 
 
 class PostUpdateView(APIView):
-    permission_classes = [IsAdminOrGuardian]
+    permission_classes = [IsAuthenticated, IsAdminOrGuardian]
 
     def get_object(self, id, request):
         try:
@@ -69,7 +69,7 @@ class PostUpdateView(APIView):
             else:
                 raise PermissionDenied("You do not have permission to edit this post.")
         except Post.DoesNotExist:
-            raise Http404
+            raise Http404(f"Post with id {id} not found.")
 
     def put(self, request, id, format=None):
         post = self.get_object(id, request)
@@ -87,7 +87,7 @@ class PostUpdateView(APIView):
     
 
 class PostDeleteView(APIView):
-    permission_classes = [IsAdminOrGuardian]
+    permission_classes = [IsAuthenticated, IsAdminOrGuardian]
 
     def get_object(self, id, request):
         try:
@@ -97,7 +97,7 @@ class PostDeleteView(APIView):
             else:
                 raise PermissionDenied("You do not have permission to delete this post.")
         except Post.DoesNotExist:
-            raise Http404
+            raise Http404(f"Post with id {id} not found.")
 
     def delete(self, request, id, format=None):
         post = self.get_object(id, request)

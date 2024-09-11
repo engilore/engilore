@@ -1,10 +1,17 @@
 from rest_framework import serializers
+from account.models import User
 from blog.models import Post
 from category.models import Category, Topic
 
 
+class AuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name']
+
+
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.StringRelatedField()
+    author = AuthorSerializer(read_only=True)
     category = serializers.SlugRelatedField(
         many=True,
         slug_field='name',
@@ -17,7 +24,7 @@ class PostSerializer(serializers.ModelSerializer):
         queryset=Topic.objects.all(),
         required=False
     )
-    
+
     class Meta:
         model = Post
         fields = [
@@ -52,7 +59,7 @@ class PostSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         categories = validated_data.pop('category', None)
         topics = validated_data.pop('topics', None)
-        
+
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
 
@@ -60,6 +67,6 @@ class PostSerializer(serializers.ModelSerializer):
             instance.category.set(categories)
         if topics is not None:
             instance.topics.set(topics)
-        
+
         instance.save()
         return instance
