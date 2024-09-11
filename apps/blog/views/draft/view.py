@@ -2,14 +2,15 @@ from django.http import Http404
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from account.permissions import IsAdminOrGuardian
 from blog.models import Post
-from blog.views.post.serializer import PostSerializer
+from blog.views.serializer import PostSerializer
 
 
 class PostDraftListView(APIView):
-    permission_classes = [IsAdminOrGuardian]
+    permission_classes = [IsAuthenticated, IsAdminOrGuardian]
 
     def get(self, request, format=None):
         posts = Post.objects.filter(status='draft', author=request.user)
@@ -21,7 +22,7 @@ class PostDraftListView(APIView):
 
 
 class PostDraftDetailView(APIView):
-    permission_classes = [IsAdminOrGuardian]
+    permission_classes = [IsAuthenticated, IsAdminOrGuardian]
 
     def get_object(self, id, request):
         try:
@@ -39,7 +40,7 @@ class PostDraftDetailView(APIView):
 
 
 class PostDraftUpdateView(APIView):
-    permission_classes = [IsAdminOrGuardian]
+    permission_classes = [IsAuthenticated, IsAdminOrGuardian]
 
     def get_object(self, id, request):
         try:
@@ -63,7 +64,7 @@ class PostDraftUpdateView(APIView):
 
 
 class PostDraftDeleteView(APIView):
-    permission_classes = [IsAdminOrGuardian]
+    permission_classes = [IsAuthenticated, IsAdminOrGuardian]
 
     def get_object(self, id, request):
         try:
