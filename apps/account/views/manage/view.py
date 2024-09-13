@@ -90,6 +90,7 @@ class UserRoleAssignView(APIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         user.save()
+
         return Response({
             'message': f'Role "{role}" assigned successfully to user {user.username}'
         }, status=status.HTTP_200_OK)

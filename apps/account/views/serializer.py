@@ -19,6 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
             'is_admin',
             'is_auxiliary',
             'is_active',
+            'date_joined'
         ]
         extra_kwargs = {
             'password': {'write_only': True},
