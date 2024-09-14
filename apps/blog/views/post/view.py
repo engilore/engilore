@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from account.permissions import IsAdminOrGuardian
 from blog.models import Post
-from blog.views.serializer import PostSerializer
+from blog.views.post.serializer import PostSerializer
 
 
 class PostCreateView(APIView):
@@ -26,6 +26,18 @@ class PostCreateView(APIView):
             'message': 'Post creation failed',
             'errors': serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserPostListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        posts = Post.objects.filter(status='published', author=request.user)
+        serializer = PostSerializer(posts, many=True)
+        return Response({
+            'message': 'List of your published posts',
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
 
 
 class PostListView(APIView):

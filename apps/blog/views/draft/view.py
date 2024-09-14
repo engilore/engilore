@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from account.permissions import IsAdminOrGuardian
 from blog.models import Post
-from blog.views.serializer import PostSerializer
+from blog.views.draft.serializer import PostDraftSerializer
 
 
 class PostDraftListView(APIView):
@@ -14,7 +14,7 @@ class PostDraftListView(APIView):
 
     def get(self, request, format=None):
         posts = Post.objects.filter(status='draft', author=request.user)
-        serializer = PostSerializer(posts, many=True)
+        serializer = PostDraftSerializer(posts, many=True)
         return Response({
             'message': 'List of draft posts',
             'data': serializer.data
@@ -32,7 +32,7 @@ class PostDraftDetailView(APIView):
 
     def get(self, request, id, format=None):
         post = self.get_object(id, request)
-        serializer = PostSerializer(post)
+        serializer = PostDraftSerializer(post)
         return Response({
             'message': 'Draft post details retrieved successfully',
             'data': serializer.data
@@ -50,7 +50,7 @@ class PostDraftUpdateView(APIView):
 
     def put(self, request, id, format=None):
         post = self.get_object(id, request)
-        serializer = PostSerializer(post, data=request.data, partial=True)
+        serializer = PostDraftSerializer(post, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({

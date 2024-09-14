@@ -7,7 +7,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from account.permissions import IsAdmin, IsAdminOrGuardian
 from category.models import Topic
-from category.views.serializer import TopicSerializer
+from category.views.topic.serializer import TopicSerializer
 
 
 
