@@ -5,8 +5,9 @@ from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from account.permissions import IsAdminOrGuardian
+from account.permissions import IsAdminOrGuardian, IsAdmin
 from blog.models import Post
+from blog.constants import POST_TYPE
 from blog.views.post.serializer import PostSerializer
 
 
@@ -71,7 +72,7 @@ class PostDetailView(APIView):
 
 
 class PostUpdateView(APIView):
-    permission_classes = [IsAuthenticated, IsAdminOrGuardian]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get_object(self, id, request):
         try:
@@ -99,7 +100,7 @@ class PostUpdateView(APIView):
     
 
 class PostDeleteView(APIView):
-    permission_classes = [IsAuthenticated, IsAdminOrGuardian]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def get_object(self, id, request):
         try:
@@ -117,3 +118,11 @@ class PostDeleteView(APIView):
         return Response({
             'message': 'Post deleted successfully'
         }, status=status.HTTP_204_NO_CONTENT)
+
+
+class PostTypeListView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        post_types = [{'value': key, 'label': value} for key, value in POST_TYPE]
+        return Response(post_types)
