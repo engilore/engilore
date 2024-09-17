@@ -69,12 +69,18 @@ class Category(models.Model):
             return existing_name != self.name
         return False
 
+    def _is_description_changed(self):
+        if self.pk:
+            existing_description = Category.objects.filter(pk=self.pk).values_list('description', flat=True).first()
+            return existing_description != self.description
+        return False
+
     def _set_meta_title(self):
-        if not self.meta_title:
+        if not self.meta_title or self._is_name_changed():
             self.meta_title = self.name
 
     def _set_meta_description(self):
-        if not self.meta_description:
+        if not self.meta_description or self._is_description_changed():
             description_source = self.description or self.name
             self.meta_description = description_source[:155] + '...' if len(description_source) > 155 else description_source
 
@@ -82,7 +88,6 @@ class Category(models.Model):
         self._set_slug()
         self._set_meta_title()
         self._set_meta_description()
-
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -159,12 +164,24 @@ class Topic(models.Model):
 
             self.slug = slug
 
+    def _is_name_changed(self):
+        if self.pk:
+            existing_name = Topic.objects.filter(pk=self.pk).values_list('name', flat=True).first()
+            return existing_name != self.name
+        return False
+
+    def _is_description_changed(self):
+        if self.pk:
+            existing_description = Topic.objects.filter(pk=self.pk).values_list('description', flat=True).first()
+            return existing_description != self.description
+        return False
+
     def _generate_meta_title(self):
-        if not self.meta_title:
+        if not self.meta_title or self._is_name_changed():
             self.meta_title = self.name
 
     def _generate_meta_description(self):
-        if not self.meta_description:
+        if not self.meta_description or self._is_description_changed():
             description_source = self.description or self.name
             self.meta_description = description_source[:155] + '...' if len(description_source) > 155 else description_source
 

@@ -44,7 +44,7 @@ class PostSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         ]
-        read_only_fields = ['author', 'slug', 'created_at', 'updated_at', 'status',]
+        read_only_fields = ['author', 'slug', 'created_at', 'updated_at']
 
     def create(self, validated_data):
         categories = validated_data.pop('category', [])
