@@ -8,7 +8,6 @@ from blog.views.post.view import (
     PostUpdateView,
     PostDeleteView,
     PostTypeListView,
-    ToggleFeaturePostView
 )
 
 from blog.views.draft.view import (
@@ -18,9 +17,16 @@ from blog.views.draft.view import (
     PostDraftDeleteView
 )
 
+from blog.views.featured.view import (
+    FeaturedPostView,
+    ToggleFeaturePostView
+)
+
 
 urlpatterns = [
     path('post/types/', PostTypeListView.as_view(), name='post-types'),
+
+    path('post/featured/', FeaturedPostView.as_view(), name='featured-post'),
     path('post/<int:pk>/toggle-feature/', ToggleFeaturePostView.as_view(), name='toggle-feature-post'),
 
     path('post/', PostListView.as_view(), name='post-list'),
