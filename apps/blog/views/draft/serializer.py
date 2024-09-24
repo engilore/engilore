@@ -5,6 +5,7 @@ from category.models import Category, Topic
 from blog.models import Post
 from blog.views.serializer import AuthorSerializer
 
+
 class PostDraftSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
     category = serializers.SlugRelatedField(

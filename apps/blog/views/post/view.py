@@ -127,32 +127,3 @@ class PostTypeListView(APIView):
         post_types = [{'value': key, 'label': value} for key, value in POST_TYPE]
         return Response(post_types)
     
-
-class ToggleFeaturePostView(APIView):
-    permission_classes = [IsAuthenticated, IsAdmin]
-
-    def post(self, request, pk):
-        try:
-            Post.objects.filter(is_featured=True).update(is_featured=False)
-
-            post = Post.objects.get(pk=pk)
-            post.is_featured = not post.is_featured
-            post.save()
-
-            return Response({
-                'message': 'Post updated successfully',
-                'is_featured': post.is_featured
-            }, status=status.HTTP_200_OK)
-
-        except Post.DoesNotExist:
-            return Response(
-                {'error': 'Post not found'},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        except Exception as e:
-            return Response(
-                {'error': 'An error occurred while updating the post'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
