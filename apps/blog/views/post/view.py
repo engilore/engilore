@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from account.permissions import IsAdminOrGuardian, IsAdmin
 from blog.models import Post
 from blog.constants import POST_TYPE
+from blog.views.post.utils import StandardResultsPagination
 from blog.views.post.serializer import PostSerializer
 
 
@@ -31,26 +32,26 @@ class PostCreateView(APIView):
 
 class UserPostListView(APIView):
     permission_classes = [IsAuthenticated]
+    pagination_class = StandardResultsPagination
 
     def get(self, request, format=None):
         posts = Post.objects.filter(status='published', author=request.user)
-        serializer = PostSerializer(posts, many=True)
-        return Response({
-            'message': 'List of your published posts',
-            'data': serializer.data
-        }, status=status.HTTP_200_OK)
+        paginator = self.pagination_class()
+        result_page = paginator.paginate_queryset(posts, request)
+        serializer = PostSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
 
 class PostListView(APIView):
     permission_classes = [AllowAny]
+    pagination_class = StandardResultsPagination
 
     def get(self, request, format=None):
         posts = Post.objects.filter(status='published')
-        serializer = PostSerializer(posts, many=True)
-        return Response({
-            'message': 'List of published posts',
-            'data': serializer.data
-        }, status=status.HTTP_200_OK)
+        paginator = self.pagination_class()
+        result_page = paginator.paginate_queryset(posts, request)
+        serializer = PostSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
 
 class PostDetailView(APIView):
