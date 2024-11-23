@@ -1,0 +1,99 @@
+{% load static %}
+
+<style>
+  .navbar-toggler {
+    border: none;
+    outline: none;
+    box-shadow: none;
+  }
+
+  .navbar-toggler:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .profile-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .profile-circle:hover {
+    opacity: 0.9;
+  }
+
+  .profile-circle:active {
+    transform: scale(0.95);
+  }
+
+  .dropdown-menu-end {
+    right: 0;
+    left: auto;
+  }
+
+  .navbar-collapse {
+    transition: height 0.3s ease;
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+
+    <a class="navbar-brand main-font fw-bold d-flex align-items-center" href="{% url 'core-home' %}">
+      <img src="{% static 'logo.svg' %}" alt="Engilore" width="40" height="40" class="me-2">
+      Engilore
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse main-font text-center" id="navbarNavAltMarkup">
+      <div class="navbar-nav mx-auto">
+        <a class="nav-link" href="{% url 'core-home' %}">Home</a>
+        <a class="nav-link" href="{% url 'core-about' %}">About</a>
+        <a class="nav-link" href="{% url 'blog-home' %}">Blog</a>
+        {% if user.is_authenticated %}
+          <a class="nav-link d-lg-none" href="{% url 'account-manage' %}">Account</a>
+        {% endif %}
+        {% if user.is_authenticated and user.is_engilorian %}
+          <a class="nav-link d-lg-none" href="{% url 'create-blog-post' %}">Create Post</a>
+        {% endif %}
+      </div>
+
+      <div class="d-lg-block d-none">
+        {% if user.is_authenticated %}
+        <div class="dropdown">
+          <div 
+            class="profile-circle core-bg-primary" 
+            id="profileDropdown" 
+            data-bs-toggle="dropdown" 
+            aria-expanded="false"
+            role="button">
+            {{ user.first_name|slice:":1"|default:"?" }}
+          </div>
+          <ul class="dropdown-menu dropdown-menu-end main-font" aria-labelledby="profileDropdown">
+            <li><a class="dropdown-item" href="{% url 'account-profile' user.username %}">Profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'account-manage' %}">Account</a></li>
+            <li><a class="dropdown-item" href="{% url 'argus-logout' %}">Logout</a></li>
+            {% if user.is_engilorian %}
+              <li><a class="dropdown-item" href="{% url 'create-blog-post' %}">Create Post</a></li>
+            {% endif %}
+          </ul>
+        </div>
+        {% else %}
+        <a class="btn btn-secondary fw-bold mx-auto d-block secondary-font" href="{% url 'argus-login' %}">Login</a>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</nav>

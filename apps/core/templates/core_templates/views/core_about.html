@@ -1,0 +1,28 @@
+{% extends "core_templates/core_base.html" %}
+{% load static %}
+
+{% block content %}
+<section>
+<div class="container">
+    <div class="px-4 py-5 my-5">
+        <h1 class="display-5 fw-bold main-font  text-body-emphasis">
+            Sharpen the World, Thus Sharpening Ourselves.        
+        </h1>
+    </div>
+</div>
+</section>
+<section class="py-5">
+    <div class="text-center">
+        <div class="overflow-hidden">
+          <div class="p-5">
+            <img src="{% static 'engilore-arms-layout.svg' %}"
+                class="img-fluid rounded-3 shadow-lg" 
+                alt="Example image"
+                width="700"
+                height="500"
+                loading="lazy">
+          </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
