@@ -1,0 +1,42 @@
+{% extends "hub_templates/hub_base.html" %}
+
+{% block content %}
+<section class="py-5">
+<div class="container">
+    <div class="py-5">
+        <h2 class="main-font">
+            Welcome to the Admin Dashboard {{ first_name }}.
+        </h2>
+    </div>
+    <div class="row secondary-font">
+        <div class="col-md-4">
+            <div class="card text-white bg-secondary mb-3">
+                <div class="card-header text-center fw-bold">Users</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ users_count }}</h5>
+                    <p class="card-text">Total registered users.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-secondary mb-3">
+                <div class="card-header text-center fw-bold">Categories</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ categories_count }}</h5>
+                    <p class="card-text">Total categories created.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-secondary mb-3">
+                <div class="card-header text-center fw-bold">Topics</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ topics_count }}</h5>
+                    <p class="card-text">Total topics created.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+{% endblock content %}

@@ -1,0 +1,60 @@
+{% extends "hub_templates/hub_base.html" %}
+
+{% block content %}
+<section class="py-5 d-flex justify-content-center align-items-center">
+<div class="container">
+    <div class="secondary-font row justify-content-center mt-5">
+        <div class="col-md-8">
+            <div class="py-3">
+                <h2 class="main-font text-center mb-4">
+                    Update User: <strong>@{{ object.username }}</strong>
+                </h2>
+            </div>
+            <form method="POST" class="p-4 shadow rounded bg-body">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_username" class="form-label">{{ form.username.label }}</label>
+                    {{ form.username }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_email" class="form-label">{{ form.email.label }}</label>
+                    {{ form.email }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_first_name" class="form-label">{{ form.first_name.label }}</label>
+                    {{ form.first_name }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_last_name" class="form-label">{{ form.last_name.label }}</label>
+                    {{ form.last_name }}
+                </div>
+                <div class="mb-3 form-check">
+                    {{ form.is_admin }}
+                    <label for="id_is_admin" class="form-check-label">{{ form.is_admin.label }}</label>
+                </div>
+                <div class="mb-3 form-check">
+                    {{ form.is_engilorian }}
+                    <label for="id_is_engilorian" class="form-check-label">{{ form.is_engilorian.label }}</label>
+                </div>
+                <div class="mb-3 form-check">
+                    {{ form.is_auxiliary }}
+                    <label for="id_is_auxiliary" class="form-check-label">{{ form.is_auxiliary.label }}</label>
+                </div>
+                <div class="mb-3 form-check">
+                    {{ form.is_verified }}
+                    <label for="id_is_verified" class="form-check-label">{{ form.is_verified.label }}</label>
+                </div>
+                <div class="mb-3">
+                    <label for="id_date_of_birth" class="form-label">{{ form.date_of_birth.label }}</label>
+                    {{ form.date_of_birth }}
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success">Update User</button>
+                    <a href="{% url 'list-user' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</section>
+{% endblock content %}
