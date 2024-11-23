@@ -1,0 +1,66 @@
+{% extends "blog_templates/blog_base.html" %}
+{% load static %}
+
+
+{% block content %}
+<section class="core-bg-accent">
+    <div class="container col-xxl-8 px-4 py-5">
+        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+          <div class="col-10 col-sm-8 col-lg-6">
+            {% if blogpost.thumbnail %}
+                <img src="{{ blogpost.thumbnail.url }}" class="img-fluid rounded mt-3" alt="Blog Thumbnail">
+            {% endif %}
+          </div>
+          <div class="col-lg-6">
+            <span class="badge rounded-pill text-bg-secondary">
+                {{ blogpost.get_post_type_display }}
+            </span>
+            <span class="fw-bold main-font">
+                - {{ blogpost.category.name }}
+            </span>
+            <h1 class="display-5 main-font fw-bold lh-1 py-3">
+                {{ blogpost.title }}
+            </h1>
+            <h5 class="main-font">
+                by: {{ blogpost.author.first_name }} {{ blogpost.author.last_name }}
+                {{ blogpost.published_at|date:"F d, Y" }}
+            </h5>
+          </div>
+        </div>
+    </div>
+</section>
+
+<header class="py-2">
+    <div class="container text-center">
+        {% for topic in blogpost.topics.all %}
+            <span class="badge bg-primary">
+                {{ topic.name }}
+            </span>
+        {% endfor %}
+    </div>
+</header>
+
+<section class="py-5">
+    <div class="container">
+        <div class="text-center">
+            <p>
+            {{ blogpost.content|linebreaks }}
+            </p>
+        </div>
+    </div>
+</section>
+
+{% if request.user == blogpost.author %}
+<footer class="mt-5 pt-4 border-top">
+    <div class="container secondary-font">
+        <p class="text-muted">Last updated on {{ blogpost.updated_at|date:"F d, Y, h:i A" }}</p>
+        <div>
+            <a href="{% url 'update-blog-post' slug=blogpost.slug %}" class="btn btn-sm btn-primary me-2">Edit</a>
+            <a href="{% url 'delete-blog-post' slug=blogpost.slug %}" class="btn btn-sm btn-danger">Delete</a>
+            <a href="{% url 'list-blog-posts' %}" class="btn btn-sm btn-secondary">Back to Posts</a>
+        </div>
+    </div>
+</footer>
+{% endif %}
+
+{% endblock content %}

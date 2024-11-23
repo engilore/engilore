@@ -1,0 +1,105 @@
+{% extends "blog_templates/blog_base.html" %}
+{% load static %}
+
+{% block content %}
+<section>
+<div class="container">
+
+    {% if spotlighted_post %}
+    <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
+        <div class="col-lg-6 px-0">
+            <h1 class="display-4 fst-italic main-font">
+                {{ spotlighted_post.title }}
+            </h1>
+            <p class="main-font">
+                by {{ spotlighted_post.author.first_name }} {{ spotlighted_post.author.last_name }}
+            </p>
+            <p class="my-3">
+                {{ spotlighted_post.meta_description }}
+            </p>
+            <p class="lead main-font mb-0">
+                <a href="{% url 'detail-blog-post' slug=spotlighted_post.slug %}" class="text-body-emphasis fw-bold">
+                    Continue reading...
+                </a>
+            </p>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row mb-2">
+        {% for post in featured_posts %}
+        <div class="col-md-6">
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-primary-emphasis">
+                        {{ post.category.name }}
+                    </strong>
+                    <h3 class="mb-0">
+                        {{ post.title }}
+                    </h3>
+                    <div class="mb-1 text-body-secondary">
+                        {{ post.published_at|date:"F d, Y" }}
+                    </div>
+                    <p class="card-text mb-auto">
+                        {{ post.meta_description|truncatewords:20 }}
+                    </p>
+                    <a href="{% url 'detail-blog-post' slug=post.slug %}" class="icon-link gap-1 icon-link-hover stretched-link">
+                        Continue reading
+                    </a>
+                </div>
+                {% if post.thumbnail %}
+                <div class="col-auto d-none d-lg-block">
+                    <img src="{{ post.thumbnail.url }}" class="img-fluid rounded" alt="Thumbnail" width="200" height="250">
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row g-5">
+        <div class="col-md-8">
+            <h3 class="pb-4 mb-4 fst-italic main-font border-bottom">From the Engilorians</h3>
+            {% for post in recent_posts %}
+            <article class="blog-post mb-4">
+                <h2 class="display-5 main-font link-body-emphasis mb-1">
+                    <a href="{% url 'detail-blog-post' slug=post.slug %}" class="link-body-emphasis">{{ post.title }}</a>
+                </h2>
+                <p class="main-font">
+                    {{ post.published_at|date:"F d, Y" }} by <a href="#">{{ post.author.first_name }} {{ post.author.last_name }}</a>
+                </p>
+                <p>{{ post.meta_description|truncatewords:30 }}</p>
+            </article>
+            {% endfor %}
+        </div>
+
+        <div class="col-md-4">
+            <div class="position-sticky" style="top: 2rem;">
+                <div class="p-4 mb-3 bg-body-tertiary rounded">
+                    <h4 class="fst-italic">About</h4>
+                    <p class="mb-0">Customize this section to tell your visitors about your publication or writers.</p>
+                </div>
+                <div class="p-4">
+                    <h4 class="fst-italic">Archives</h4>
+                    <ol class="list-unstyled mb-0">
+                        {% for month, year in archives %}
+                        <li><a href="#">{{ month }} {{ year }}</a></li>
+                        {% endfor %}
+                    </ol>
+                </div>
+                <div class="p-4">
+                    <h4 class="fst-italic">Elsewhere</h4>
+                    <ol class="list-unstyled">
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">Nebulei</a></li>
+                        <li><a href="#">Twitter</a></li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</section>
+{% endblock content %}

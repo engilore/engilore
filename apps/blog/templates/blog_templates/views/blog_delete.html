@@ -1,0 +1,25 @@
+{% extends "blog_templates/blog_base.html" %}
+{% load static %}
+
+{% block title %}Delete Blog Post{% endblock title %}
+
+{% block content %}
+<section class="py-5">
+<div class="container secondary-font">
+    <div class="py-5">
+        <h2 class="main-font text-danger">
+            Delete Blog Post?
+        </h1>
+    </div>
+    <div class="alert alert-warning">
+        <p>Are you sure you want to delete the blog post <strong>"{{ blogpost.title }}"</strong>?</p>
+        <p>This action cannot be undone.</p>
+    </div>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a href="{% url 'detail-blog-post' slug=blogpost.slug %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+</section>
+{% endblock content %}

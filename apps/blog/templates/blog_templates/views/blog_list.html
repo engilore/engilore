@@ -1,0 +1,34 @@
+{% extends "blog_templates/blog_base.html" %}
+{% load static %}
+
+{% block title %}
+Blog Posts
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Blog Posts</h1>
+    <a href="{% url 'create-blog-post' %}" class="btn btn-primary mb-3">Create New Post</a>
+    {% if blogposts %}
+        <div class="list-group">
+            {% for post in blogposts %}
+                <a href="{% url 'detail-blog-post' slug=post.slug %}" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ post.title }}</h5>
+                        <small>{{ post.published_at|date:"F d, Y" }}</small>
+                    </div>
+                    <p class="mb-1">{{ post.meta_description }}</p>
+                    <small>
+                        Category: <span class="badge bg-primary">{{ post.category.name }}</span>
+                        {% for topic in post.topics.all %}
+                            <span class="badge bg-secondary">{{ topic.name }}</span>
+                        {% endfor %}
+                    </small>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No blog posts available.</p>
+    {% endif %}
+</div>
+{% endblock content %}
