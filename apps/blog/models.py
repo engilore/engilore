@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
@@ -165,6 +166,9 @@ class BlogPost(models.Model):
 
         if self.is_spotlighted:
             BlogPost.objects.filter(is_spotlighted=True).update(is_spotlighted=False)
+
+        if self.status == 'published' and self.published_at is None:
+            self.published_at = timezone.now()
 
         super().save(*args, **kwargs)
 

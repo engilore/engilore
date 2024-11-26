@@ -2,35 +2,55 @@
 {% load static %}
 
 {% block content %}
-<section class="py-5">
+<section class="py-5 core-bg-accent">
     <div class="container main-font">
         <div class="row g-4">
             {% for post in spotlighted_posts %}
-            <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
-                <!-- Post Content Section -->
-                <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
-                    <h1 class="display-5 fw-bold lh-1 text-body-emphasis">{{ post.title }}</h1>
-                    <p class="lead text-body-secondary">
-                        {{ post.meta_description|default:post.content|truncatechars:200 }}
-                    </p>
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
-                        <a href="{% url 'detail-blog-post' post.slug %}" class="btn btn-primary btn-lg fw-bold">Read More</a>
-                    </div>
-                    <p class="text-muted small">Published on {{ post.published_at|date:"F j, Y" }} by {{ post.author.get_full_name }}</p>
-                </div>
-                <!-- Thumbnail Section -->
-                <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+            <div class="col-12">
+                <div class="bg-white p-5 rounded-3 border shadow-lg position-relative">
                     {% if post.thumbnail %}
-                        <img src="{{ post.thumbnail.url }}" class="img-fluid rounded" alt="{{ post.title }}">
-                    {% else %}
-                        <div class="bg-secondary text-white text-center p-5 rounded">
-                            <p>No Image Available</p>
+                    <div class="row align-items-center">
+                        <div class="col-lg-7 px-4">
+                            <h1 class="display-5 fw-bold lh-1 text-body-emphasis mb-3">{{ post.title }}</h1>
+                            <p class="lead text-body-secondary mb-4">
+                                {{ post.meta_description|default:post.content|truncatechars:200 }}
+                            </p>
+                            <a href="{% url 'detail-blog-post' post.slug %}" class="btn btn-primary btn-sm">
+                                Continue reading
+                            </a>
+                            <p class="text-muted small mt-3">
+                                {% if post.published_at %}
+                                Published on {{ post.published_at|date:"F j" }} by <strong>{{ post.author.get_full_name }}</strong>
+                                {% else %}
+                                Publish date not available by <strong>{{ post.author.get_full_name }}</strong>
+                                {% endif %}
+                            </p>
                         </div>
+                        <div class="col-lg-5 text-center">
+                            <img src="{{ post.thumbnail.url }}" class="img-fluid rounded shadow-lg" alt="{{ post.title }}">
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col px-4">
+                        <h1 class="display-5 fw-bold lh-1 text-body-emphasis mb-3">{{ post.title }}</h1>
+                        <p class="lead text-body-secondary mb-4">
+                            {{ post.meta_description|default:post.content|truncatechars:200 }}
+                        </p>
+                        <a href="{% url 'detail-blog-post' post.slug %}" class="btn btn-primary btn-sm">
+                            Continue reading
+                        </a>
+                        <p class="text-muted small mt-3">
+                            {% if post.published_at %}
+                            Published on {{ post.published_at|date:"F j" }} by <strong>{{ post.author.get_full_name }}</strong>
+                            {% else %}
+                            Publish date not available by <strong>{{ post.author.get_full_name }}</strong>
+                            {% endif %}
+                        </p>
+                    </div>
                     {% endif %}
                 </div>
             </div>
             {% empty %}
-            <!-- Fallback Message -->
             <div class="text-center p-5">
                 <p class="text-muted">No spotlighted posts available at the moment.</p>
             </div>
@@ -50,7 +70,7 @@
             <p class="text-body-secondary">
                 Auxiliaryship offers exclusive resources, collaborative opportunities, and a vibrant community to help you unlock your full potential. Join us in creating, building, and advancing together.
             </p>
-            <a href="/signup" class="btn btn-primary fw-bold btn-lg">Become an Auxiliary</a>
+            <a href="/signup" class="btn btn-outline-secondary fw-bold btn-lg">Become an Auxiliary</a>
         </div>
   
         <div class="col text-center">
@@ -87,7 +107,7 @@
                 </div>
                 <h4 class="fst-italic fw-semibold mb-0 text-body-emphasis">Priority Access</h4>
                 <p class="text-body-secondary">
-                    Connect with Engilorians and resources to fast-track your growth and projects.
+                    Connect with Engilorian's and resources to fast-track your growth and projects.
                 </p>
             </div>
   
@@ -108,7 +128,7 @@
     </div>
 </section> 
 <section class="py-5">
-    <div class="container col-xxl-8 px-4 py-5">
+    <div class="container col-xxl-8 py-5">
         <div class="row flex-lg-row-reverse align-items-center justify-content-center g-5 py-5">
             <div class="col-10 col-sm-8 col-lg-6 text-center">
                 <div class="text-center">
@@ -126,24 +146,24 @@
             <div class="col-lg-6 text-center">
                 <p class="main-font">
                     <strong>Welcome to Engilore</strong><br>
-                    <em>"An Arena for the Willing and the Worthy"</em><br><br>
-                    Here, the mind sharpens against the grindstone of thought.<br>
-                    The spirit rises in defiance of mediocrity.<br>
-                    This is where knowledge is not merely sought—but forged.<br><br>
-                    Engilore is a sanctuary for creators, thinkers, and doers;<br>
-                    a brotherhood bound by a relentless pursuit of truth,<br>
-                    undaunted by convention and unyielding in the face of doubt.<br><br>
-                    Step forth, not as a follower,<br>
-                    but as a builder of your own path,<br>
-                    a champion of your own ideals,<br>
-                    and a challenger to the stagnant and unchallenged.<br><br>
-                    Engilore is the crucible.<br>
-                    Your will is the fire.<br><br>
-                    The question is not, ‘Will you enter?’<br>
-                    But, ‘Will you endure?’
+                    <em>"Where the Willing Shape the World"</em><br><br>
+                    Here, ideas are tested, refined, and brought to life.<br>
+                    Ambition stands in defiance of complacency,<br>
+                    and knowledge becomes a tool for creation.<br><br>
+                    Engilore is a haven for those who build, question, and innovate;<br>
+                    a collective bound by a shared drive to uncover truth<br>
+                    and challenge the limits of possibility.<br><br>
+                    This is not a place for passive observers.<br>
+                    It is for those ready to carve their own path,<br>
+                    to embody their principles,<br>
+                    and to confront the unchallenged norms of the world.<br><br>
+                    Engilore is the proving ground.<br>
+                    Your resolve is the spark.<br><br>
+                    The question isn’t, ‘Will you step in?’<br>
+                    It’s, ‘Will you rise to meet the challenge?’
                 </p>
             </div>
         </div>
     </div>    
 </section>
-{% endblock content %}
+{% endblock %}

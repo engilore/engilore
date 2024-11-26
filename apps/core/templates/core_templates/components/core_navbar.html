@@ -60,6 +60,7 @@
       <div class="navbar-nav mx-auto">
         <a class="nav-link" href="{% url 'core-home' %}">Home</a>
         <a class="nav-link" href="{% url 'core-about' %}">About</a>
+        <a class="nav-link" href="{% url 'blog-posts' %}">Posts</a>
         <a class="nav-link" href="{% url 'blog-home' %}">Blog</a>
         {% if user.is_authenticated %}
           <a class="nav-link d-lg-none" href="{% url 'account-manage' %}">Account</a>

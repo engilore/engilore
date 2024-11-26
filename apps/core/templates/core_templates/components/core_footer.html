@@ -5,8 +5,11 @@
         <ul class="main-font nav justify-content-center border-bottom pb-3 mb-3">
             <li class="nav-item"><a href="{% url 'core-home' %}" class="nav-link px-2 text-body-secondary">Home</a></li>
             <li class="nav-item"><a href="{% url 'argus-register' %}" class="nav-link px-2 text-body-secondary">Join</a></li>
-            <li class="nav-item"><a href="{% url 'hub-home' %}" class="nav-link px-2 text-body-secondary">Hub</a></li>
         </ul>
-        <p class="main-font fw-bold text-center">&copy; 2024 Engilore</p>
+        <p class="main-font fw-bold text-center text-muted">
+            <a href="{% url 'hub-home' %}" class="text-decoration-none text-muted">
+                &copy; 2024 Engilore
+            </a>
+        </p>
     </div>
 </footer>

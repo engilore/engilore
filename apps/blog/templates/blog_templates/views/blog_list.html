@@ -1,34 +1,110 @@
 {% extends "blog_templates/blog_base.html" %}
-{% load static %}
 
 {% block title %}
-Blog Posts
-{% endblock title %}
+Engilorian Post's
+{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="mb-4">Blog Posts</h1>
-    <a href="{% url 'create-blog-post' %}" class="btn btn-primary mb-3">Create New Post</a>
-    {% if blogposts %}
-        <div class="list-group">
-            {% for post in blogposts %}
+<section class="py-5 core-bg-accent min-vh-100">
+    <div class="container">
+        <div class="py-5">
+            <h2 class="main-font">All of the Post's of the Engilorians.</h2>
+        </div>
+
+        <form method="get" class="mb-4 main-font">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-2">
+                    <select name="category" class="form-select">
+                        <option value="">All Categories</option>
+                        {% for category in categories %}
+                        <option value="{{ category.name }}" {% if query_params.category == category.name %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="topic" class="form-select">
+                        <option value="">All Topics</option>
+                        {% for topic in topics %}
+                        <option value="{{ topic.name }}" {% if query_params.topic == topic.name %}selected{% endif %}>
+                            {{ topic.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="post_type" class="form-select">
+                        <option value="">All Types</option>
+                        {% for post_type in post_types %}
+                        <option value="{{ post_type }}" {% if query_params.post_type == post_type %}selected{% endif %}>
+                            {{ post_type }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="date" name="start_date" class="form-control" placeholder="Start Date" value="{{ query_params.start_date }}">
+                </div>
+                <div class="col-md-2">
+                    <input type="date" name="end_date" class="form-control" placeholder="End Date" value="{{ query_params.end_date }}">
+                </div>
+                <div class="col-md-6 d-flex">
+                    <input type="text" name="q" class="form-control me-2" placeholder="Search..." value="{{ query_params.q }}">
+                    <button type="submit" class="btn btn-secondary secondary-font fw-bold">Search</button>
+                </div>
+            </div>
+        </form>
+
+        {% if blogposts %}
+            <div class="list-group">
+                {% for post in blogposts %}
                 <a href="{% url 'detail-blog-post' slug=post.slug %}" class="list-group-item list-group-item-action">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{ post.title }}</h5>
+                    <div class="main-font d-flex w-100 justify-content-between">
+                        <h5 class="mb-1 fw-bold">{{ post.title }}</h5>
                         <small>{{ post.published_at|date:"F d, Y" }}</small>
                     </div>
-                    <p class="mb-1">{{ post.meta_description }}</p>
+                    <p class="main-font mb-1">{{ post.meta_description }}</p>
                     <small>
-                        Category: <span class="badge bg-primary">{{ post.category.name }}</span>
+                        <span class="badge bg-primary">{{ post.post_type }}</span>
+                        <span class="badge bg-secondary">{{ post.category.name }}</span>
                         {% for topic in post.topics.all %}
-                            <span class="badge bg-secondary">{{ topic.name }}</span>
+                        <span class="badge rounded-pill bg-secondary">{{ topic.name }}</span>
                         {% endfor %}
                     </small>
                 </a>
-            {% endfor %}
-        </div>
-    {% else %}
-        <p>No blog posts available.</p>
-    {% endif %}
-</div>
-{% endblock content %}
+                {% endfor %}
+            </div>
+            <div class="mt-4">
+                {% if is_paginated %}
+                    <nav>
+                        <ul class="pagination">
+                            {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?{% if query_params %}{{ query_params.urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% for page_num in paginator.page_range %}
+                                <li class="page-item {% if page_obj.number == page_num %}active{% endif %}">
+                                    <a class="page-link" href="?{% if query_params %}{{ query_params.urlencode }}&{% endif %}page={{ page_num }}">{{ page_num }}</a>
+                                </li>
+                            {% endfor %}
+                            {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?{% if query_params %}{{ query_params.urlencode }}&{% endif %}page={{ page_obj.next_page_number }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
+        {% else %}
+            <p>No blog posts available.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

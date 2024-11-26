@@ -1,10 +1,16 @@
+from calendar import month_name
+
 from django.urls import reverse_lazy
 from django.http import HttpResponseForbidden
+from django.db.models import Count, Q
+from django.db.models.functions import ExtractYear, ExtractMonth
+from django.utils.dateparse import parse_date
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, DetailView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
+from account.models import User
 from argus.permissions import EngilorianRequiredMixin
-from category.models import Category
+from category.models import Category, Topic
 from blog.models import BlogPost
 from blog.forms import BlogPostForm
 
@@ -14,10 +20,50 @@ class BlogHomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['spotlighted_post'] = BlogPost.objects.filter(is_spotlighted=True, status='published').first()
-        context['featured_posts'] = BlogPost.objects.filter(is_featured=True, status='published').exclude(is_spotlighted=True)[:2]
-        context['recent_posts'] = BlogPost.objects.filter(status='published').order_by('-published_at')[:5]
+
+        context['spotlighted_post'] = self.get_spotlighted_post()
+        context['featured_posts'] = self.get_featured_posts()
+        context['recent_posts'] = self.get_recent_posts(context['spotlighted_post'], context['featured_posts'])
+        context['engilorians'] = self.get_engilorians()
+        context['archives'] = self.get_archives()
+
         return context
+
+    def get_spotlighted_post(self):
+        return BlogPost.objects.filter(is_spotlighted=True, status='published').first()
+
+    def get_featured_posts(self):
+        return BlogPost.objects.filter(is_featured=True, status='published').exclude(is_spotlighted=True)[:2]
+
+    def get_recent_posts(self, spotlighted_post, featured_posts):
+        excluded_ids = [spotlighted_post.id] if spotlighted_post else []
+        excluded_ids += [post.id for post in featured_posts]
+        return BlogPost.objects.filter(status='published').exclude(id__in=excluded_ids).order_by('-published_at')[:5]
+
+    def get_engilorians(self):
+        return User.objects.filter(is_engilorian=True)
+
+    def get_archives(self):
+        from calendar import month_name
+        from django.db.models.functions import ExtractYear, ExtractMonth
+        from django.db.models import Count
+
+        archives = (
+            BlogPost.objects.filter(status='published')
+            .annotate(
+                year=ExtractYear('published_at'),
+                month=ExtractMonth('published_at')
+            )
+            .values('year', 'month')
+            .annotate(post_count=Count('id'))
+            .order_by('-year', '-month')
+        )
+
+        for archive in archives:
+            archive['month_name'] = month_name[archive['month']]
+
+        return archives
+    
 
 class BlogPostListView(ListView):
     model = BlogPost
@@ -26,7 +72,63 @@ class BlogPostListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return BlogPost.objects.filter(status='published').select_related('category', 'author').prefetch_related('topics')
+        queryset = BlogPost.objects.filter(status='published').select_related('category', 'author').prefetch_related('topics')
+
+        filters = {
+            'category': self.request.GET.get('category'),
+            'topic': self.request.GET.get('topic'),
+            'post_type': self.request.GET.get('post_type'),
+            'search_query': self.request.GET.get('q'),
+            'start_date': self.request.GET.get('start_date'),
+            'end_date': self.request.GET.get('end_date'),
+            'year': self.request.GET.get('year'),
+            'month': self.request.GET.get('month'),
+        }
+
+        return self.apply_filters(queryset, filters)
+
+    def apply_filters(self, queryset, filters):
+        if filters['category']:
+            queryset = queryset.filter(category__name=filters['category'])
+        if filters['topic']:
+            queryset = queryset.filter(topics__name=filters['topic'])
+        if filters['post_type']:
+            queryset = queryset.filter(post_type=filters['post_type'])
+        if filters['search_query']:
+            queryset = queryset.filter(
+                Q(title__icontains=filters['search_query']) |
+                Q(meta_description__icontains=filters['search_query'])
+            )
+        if filters['start_date']:
+            parsed_start_date = parse_date(filters['start_date'])
+            if parsed_start_date:
+                queryset = queryset.filter(published_at__gte=parsed_start_date)
+        if filters['end_date']:
+            parsed_end_date = parse_date(filters['end_date'])
+            if parsed_end_date:
+                queryset = queryset.filter(published_at__lte=parsed_end_date)
+        if filters['year']:
+            queryset = queryset.filter(published_at__year=filters['year'])
+        if filters['month']:
+            queryset = queryset.filter(published_at__month=filters['month'])
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(self.get_extra_context())
+        return context
+
+    def get_extra_context(self):
+        return {
+            'categories': Category.objects.all(),
+            'topics': Topic.objects.all(),
+            'post_types': BlogPost.objects.values_list('post_type', flat=True).distinct(),
+            'query_params': self.request.GET,
+            'selected_year': self.request.GET.get('year'),
+            'selected_month': self.request.GET.get('month'),
+        }
+
 
 class BlogPostCreateView(EngilorianRequiredMixin, LoginRequiredMixin, CreateView):
     model = BlogPost

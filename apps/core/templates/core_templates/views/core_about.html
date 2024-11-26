@@ -2,27 +2,95 @@
 {% load static %}
 
 {% block content %}
-<section>
-<div class="container">
-    <div class="px-4 py-5 my-5">
-        <h1 class="display-5 fw-bold main-font  text-body-emphasis">
-            Sharpen the World, Thus Sharpening Ourselves.        
-        </h1>
-    </div>
-</div>
-</section>
 <section class="py-5">
-    <div class="text-center">
-        <div class="overflow-hidden">
-          <div class="p-5">
-            <img src="{% static 'engilore-arms-layout.svg' %}"
-                class="img-fluid rounded-3 shadow-lg" 
-                alt="Example image"
-                width="700"
-                height="500"
-                loading="lazy">
+  <div class="container text-center main-font">
+      <h1 class="display-4 fw-bold text-body-emphasis">About Engilore</h1>
+      <div class="col-lg-6 mx-auto">
+          <p class="lead mb-4">
+              Engilore is a hub for creators, thinkers, and innovators, united by a shared passion for building, exploring, and advancing the frontiers of knowledge. From crafting engineering marvels to diving deep into philosophical discourse, Engilore embodies the spirit of discovery and excellence.
+          </p>
+          <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5 px-5">
+              <a href="{% url 'argus-register' %}" class="btn btn-outline-secondary btn-lg px-4">Join Engilore</a>
+          </div>
+      </div>
+      <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-6 col-sm-3 p-3">
+                <img src="{% static 'duality.svg' %}" class="img-fluid mx-auto d-block" alt="Duality & Defiance">
+            </div>
+            <div class="col-6 col-sm-3 p-3">
+                <img src="{% static 'sacrifice.svg' %}" class="img-fluid mx-auto d-block" alt="Sacrifice & Triumph">
+            </div>
+            <div class="col-6 col-sm-3 p-3">
+                <img src="{% static 'sapience.svg' %}" class="img-fluid mx-auto d-block" alt="Sapience & Zeal">
+            </div>
+            <div class="col-6 col-sm-3 p-3">
+                <img src="{% static 'sincerity.svg' %}" class="img-fluid mx-auto d-block" alt="Sincerity & Purity">
+            </div>
+        </div>
+      </div>
+      <div class="overflow-hidden">
+          <div class="container">
+              <img src="{% static 'engilore-arms-layout.svg' %}" class="img-fluid border rounded-3 mb-4" alt="Engilore emblem" loading="lazy">
+          </div>
+      </div>
+  </div>
+</section>
+
+<section class="py-5 core-bg-accent">
+    <div class="container main-font">
+        <h2 class="pb-2">What Engilore Embodies</h2>
+    
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
+          <div class="col d-flex align-items-start">
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">The Courage to Begin</h3>
+              <p>Engilore invites you to step beyond the familiar, to build with hands that tremble yet persist, and to call forth the new from the shadow of the known.</p>
+            </div>
+          </div>
+          <div class="col d-flex align-items-start">
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">A Fire That Consumes</h3>
+              <p>Here dwells the unyielding spirit, one that feeds on challenge and transforms doubt into creation. To burn brightly is not to perish, but to illuminate.</p>
+            </div>
+          </div>
+          <div class="col d-flex align-items-start">
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">The Art of Struggle</h3>
+              <p>Every great endeavor is a climb against gravity, an embrace of resistance that sharpens the mind and strengthens the will.</p>
+            </div>
+          </div>
+          <div class="col d-flex align-items-start">
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">The Freedom to Build</h3>
+              <p>To shape the world is to wield freedom—freedom that demands mastery, and mastery that breathes life into form and function.</p>
+            </div>
+          </div>
+          <div class="col d-flex align-items-start">
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">A Question That Lingers</h3>
+              <p>What more can be done? What has yet to be uncovered? In this quiet inquiry lies the seed of every leap forward.</p>
+            </div>
+          </div>
+          <div class="col d-flex align-items-start">
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">The Dance with the Unknown</h3>
+              <p>Engilore honors those who do not flee from uncertainty but greet it as a partner in the creation of what has never been.</p>
+            </div>
+          </div>
+          <div class="col d-flex align-items-start">
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">The Beauty of Refinement</h3>
+              <p>It is not enough to create; to perfect what one has made is to honor the labor that gave it birth.</p>
+            </div>
+          </div>
+          <div class="col d-flex align-items-start">
+            <div>
+              <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">The Legacy of Makers</h3>
+              <p>Every invention is a bridge, every idea a step forward for those who will follow. To build is to leave behind a path for others to tread.</p>
+            </div>
           </div>
         </div>
-    </div>
+      </div>
 </section>
 {% endblock content %}
