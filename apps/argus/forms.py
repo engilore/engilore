@@ -28,5 +28,6 @@ class UserRegisterForm(UserCreationForm):
         return user
 
 
-class UserLoginForm(AuthenticationForm):
-    username = forms.CharField(label='Username or Email')
+class UserLoginForm(forms.Form):
+    username_or_email = forms.CharField(label='Username or Email', max_length=150)
+    password = forms.CharField(widget=forms.PasswordInput)

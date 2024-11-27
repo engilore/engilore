@@ -27,13 +27,18 @@ def argus_register(request):
 
 def argus_login(request):
     if request.method == 'POST':
-        form = UserLoginForm(data=request.POST)
+        form = UserLoginForm(request.POST)
         if form.is_valid():
-            username_or_email = form.cleaned_data.get('username')
+            username_or_email = form.cleaned_data.get('username_or_email')
             password = form.cleaned_data.get('password')
 
-            user = User.objects.filter(email=username_or_email).first() or \
-                   User.objects.filter(username=username_or_email).first()
+            try:
+                user = User.objects.get(email__iexact=username_or_email)
+            except User.DoesNotExist:
+                try:
+                    user = User.objects.get(username__iexact=username_or_email)
+                except User.DoesNotExist:
+                    user = None
 
             if user:
                 user = authenticate(username=user.username, password=password)
@@ -47,7 +52,6 @@ def argus_login(request):
 
     context = {'form': form, 'title': 'Login'}
     return render(request, 'argus_templates/views/argus_login.html', context)
-
 
 def argus_logout(request):
     logout(request)
