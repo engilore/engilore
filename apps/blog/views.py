@@ -232,7 +232,7 @@ class BlogPostUpdateView(EngilorianRequiredMixin, LoginRequiredMixin, UserPasses
 class BlogPostDeleteView(EngilorianRequiredMixin, LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = BlogPost
     template_name = 'blog_templates/views/blog_delete.html'
-    success_url = reverse_lazy('list-blog-posts')
+    success_url = reverse_lazy('blog-posts')
 
     def test_func(self):
         blog_post = self.get_object()

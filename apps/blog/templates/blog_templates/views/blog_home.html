@@ -6,7 +6,7 @@
 
     {% if spotlighted_post %}
     <a href="{% url 'detail-blog-post' slug=spotlighted_post.slug %}" class="text-decoration-none">
-        <div class="p-4 p-md-5 mb-4 rounded text-white core-bg-primary">
+        <div class="p-4 p-md-5 mb-4 rounded text-dark core-bg-accent">
             <div class="col-lg-6">
                 <h1 class="main-font">
                     {{ spotlighted_post.title }}
@@ -80,7 +80,7 @@
 
         <div class="col-md-4">
             <div class="position-sticky">
-                <div class="p-4 rounded core-bg-primary">
+                <div class="p-4 rounded core-bg-secondary">
                     <h4 class="text-white fst-italic main-font">Engilorians</h4>
                     {% if engilorians %}
                     <ul class="list-group">
@@ -111,9 +111,10 @@
                 <div class="p-4">
                     <h4 class="fst-italic main-font">Elsewhere</h4>
                     <ol class="list-unstyled">
-                        <li><a href="#" class="link-secondary main-font">Nebulei</a></li>
-                        <li><a href="#" class="link-secondary main-font">GitHub</a></li>
-                        <li><a href="#" class="link-secondary main-font">X / Twitter</a></li>
+                        <li><a href="https://nebulei.com/" target="_blank" class="link-secondary main-font">Nebulei</a></li>
+                        <li><a href="https://github.com/engilore" target="_blank" class="link-secondary main-font">GitHub</a></li>
+                        <li><a href="https://www.youtube.com/@engilore" target="_blank" class="link-secondary main-font">Youtube</a></li>
+                        <li><a href="https://x.com/engilore" target="_blank" class="link-secondary main-font">X / Twitter</a></li>
                     </ol>
                 </div>
             </div>

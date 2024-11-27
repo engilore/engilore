@@ -1,20 +1,20 @@
 {% extends "blog_templates/blog_base.html" %}
 
 {% block title %}
-Engilorian Post's
+Engilorian Posts
 {% endblock %}
 
 {% block content %}
 <section class="py-5 core-bg-accent min-vh-100">
     <div class="container">
-        <div class="py-5">
-            <h2 class="main-font">All of the Post's of the Engilorians.</h2>
+        <div class="py-4">
+            <h2 class="main-font mb-4">All of the Engilorians' Posts</h2>
         </div>
-
-        <form method="get" class="mb-4 main-font">
-            <div class="row g-3 align-items-end">
-                <div class="col-md-2">
-                    <select name="category" class="form-select">
+        
+        <form method="get" class="mb-5 main-font">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <select name="category" class="form-select" aria-label="Category">
                         <option value="">All Categories</option>
                         {% for category in categories %}
                         <option value="{{ category.name }}" {% if query_params.category == category.name %}selected{% endif %}>
@@ -23,8 +23,8 @@ Engilorian Post's
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-md-2">
-                    <select name="topic" class="form-select">
+                <div class="col-md-3">
+                    <select name="topic" class="form-select" aria-label="Topic">
                         <option value="">All Topics</option>
                         {% for topic in topics %}
                         <option value="{{ topic.name }}" {% if query_params.topic == topic.name %}selected{% endif %}>
@@ -34,7 +34,7 @@ Engilorian Post's
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <select name="post_type" class="form-select">
+                    <select name="post_type" class="form-select" aria-label="Post Type">
                         <option value="">All Types</option>
                         {% for post_type in post_types %}
                         <option value="{{ post_type }}" {% if query_params.post_type == post_type %}selected{% endif %}>
@@ -43,42 +43,47 @@ Engilorian Post's
                         {% endfor %}
                     </select>
                 </div>
+
                 <div class="col-md-2">
-                    <input type="date" name="start_date" class="form-control" placeholder="Start Date" value="{{ query_params.start_date }}">
+                    <input type="date" name="start_date" class="form-control" placeholder="Start Date" value="{{ query_params.start_date }}" aria-label="Start Date">
                 </div>
                 <div class="col-md-2">
-                    <input type="date" name="end_date" class="form-control" placeholder="End Date" value="{{ query_params.end_date }}">
-                </div>
-                <div class="col-md-6 d-flex">
-                    <input type="text" name="q" class="form-control me-2" placeholder="Search..." value="{{ query_params.q }}">
-                    <button type="submit" class="btn btn-secondary secondary-font fw-bold">Search</button>
+                    <input type="date" name="end_date" class="form-control" placeholder="End Date" value="{{ query_params.end_date }}" aria-label="End Date">
                 </div>
             </div>
+
+            <div class="py-3">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search..." value="{{ query_params.q }}" aria-label="Search">
+                    <button type="submit" class="btn btn-secondary fw-bold">Search</button>
+                </div>
+            </div>
+
         </form>
 
         {% if blogposts %}
             <div class="list-group">
                 {% for post in blogposts %}
-                <a href="{% url 'detail-blog-post' slug=post.slug %}" class="list-group-item list-group-item-action">
-                    <div class="main-font d-flex w-100 justify-content-between">
-                        <h5 class="mb-1 fw-bold">{{ post.title }}</h5>
-                        <small>{{ post.published_at|date:"F d, Y" }}</small>
+                <a href="{% url 'detail-blog-post' slug=post.slug %}" class="list-group-item list-group-item-action rounded mb-3 p-3">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1 fw-bold main-font">{{ post.title }}</h5>
+                        <small class="main-font">{{ post.published_at|date:"F d, Y" }}</small>
                     </div>
-                    <p class="main-font mb-1">{{ post.meta_description }}</p>
-                    <small>
-                        <span class="badge bg-primary">{{ post.post_type }}</span>
+                    <p class="mb-2 text-secondary main-font">{{ post.meta_description }}</p>
+                    <div>
+                        <span class="badge bg-dark">{{ post.post_type }}</span>
                         <span class="badge bg-secondary">{{ post.category.name }}</span>
                         {% for topic in post.topics.all %}
                         <span class="badge rounded-pill bg-secondary">{{ topic.name }}</span>
                         {% endfor %}
-                    </small>
+                    </div>
                 </a>
                 {% endfor %}
             </div>
             <div class="mt-4">
                 {% if is_paginated %}
                     <nav>
-                        <ul class="pagination">
+                        <ul class="pagination justify-content-center">
                             {% if page_obj.has_previous %}
                             <li class="page-item">
                                 <a class="page-link" href="?{% if query_params %}{{ query_params.urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}" aria-label="Previous">
@@ -103,7 +108,7 @@ Engilorian Post's
                 {% endif %}
             </div>
         {% else %}
-            <p>No blog posts available.</p>
+            <p class="text-center">No blog posts available.</p>
         {% endif %}
     </div>
 </section>
