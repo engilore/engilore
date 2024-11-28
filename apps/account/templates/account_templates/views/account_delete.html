@@ -1,0 +1,15 @@
+{% extends "account_templates/account_base.html" %}
+
+{% block content %}
+<section class="py-5 d-flex justify-content-center align-items-cente core-bg-accent">
+<div class="container secondary-font">
+    <h1 class="main-font">Delete Account</h1>
+    <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete My Account</button>
+        <a href="{% url 'account-manage' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+</section>
+{% endblock %}

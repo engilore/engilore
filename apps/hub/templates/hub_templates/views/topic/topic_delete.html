@@ -1,0 +1,19 @@
+{% extends "hub_templates/hub_base.html" %}
+
+{% block content %}
+<section class="py-5 d-flex justify-content-center align-items-center">
+    <div class="container secondary-font">
+        <div class="py-5">
+            <h2 class="main-font">Delete Topic <strong>{{ object.name }}</strong>?</h2>
+        </div>
+        <div class="pb-5">
+            <p>Are you sure you want to delete this topic? This action cannot be undone.</p>
+        </div>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete Topic</button>
+            <a href="{% url 'list-topic' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</section>
+{% endblock content %}

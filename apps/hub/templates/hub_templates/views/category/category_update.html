@@ -1,0 +1,44 @@
+{% extends "hub_templates/hub_base.html" %}
+
+{% block content %}
+<section class="py-5 d-flex justify-content-center align-items-center">
+<div class="container">
+    <div class="secondary-font row justify-content-center mt-5">
+        <div class="col-md-8">
+            <div class="py-3">
+                <h2 class="main-font text-center mb-4">
+                    Update Category: <strong>{{ object.name }}</strong>
+                </h2>
+            </div>            
+            <form method="POST" class="p-4 shadow rounded bg-body">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_name" class="form-label">{{ form.name.label }}</label>
+                    {{ form.name }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_description" class="form-label">{{ form.description.label }}</label>
+                    {{ form.description }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_meta_title" class="form-label">{{ form.meta_title.label }}</label>
+                    {{ form.meta_title }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_meta_description" class="form-label">{{ form.meta_description.label }}</label>
+                    {{ form.meta_description }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_meta_keywords" class="form-label">{{ form.meta_keywords.label }}</label>
+                    {{ form.meta_keywords }}
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-success">Update Category</button>
+                    <a href="{% url 'list-category' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</section>
+{% endblock %}

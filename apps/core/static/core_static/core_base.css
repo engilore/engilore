@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+
+.main-font {
+    font-family: "EB Garamond", serif;
+}
+  
+.secondary-font {
+    font-family: "DM Sans", sans-serif;
+}
+
+.core-bg-accent {
+    background-color: #e7dfc6;
+}
+
+.core-bg-primary {
+    background-color: #5ca4a9;
+}
+
+.core-bg-secondary {
+    background-color: #4f000b;
+}
+
+.core-bg-engilore {
+    background-color: #abc4ff;
+}
+
+.core-btn-primary {
+    background-color: #5ca4a9;
+}
+
+input:focus, button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
