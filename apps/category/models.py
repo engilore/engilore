@@ -153,7 +153,7 @@ class Topic(models.Model):
         return self.name
 
     def generate_slug(self):
-        base_slug = slugify(self.title)
+        base_slug = slugify(self.name)
         slug = base_slug
         counter = 1
 
