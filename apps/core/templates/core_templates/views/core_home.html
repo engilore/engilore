@@ -11,6 +11,9 @@
                     {% if post.thumbnail %}
                     <div class="row align-items-center">
                         <div class="col-lg-7 px-4">
+                            <strong class="secondary-font link-secondary">
+                                {{ post.post_type }}
+                            </strong>
                             <h1 class="display-5 fw-bold lh-1 text-body-emphasis mb-3">{{ post.title }}</h1>
                             <p class="lead text-body-secondary mb-4">
                                 {{ post.meta_description|default:post.content|truncatechars:200 }}
@@ -32,6 +35,9 @@
                     </div>
                     {% else %}
                     <div class="col px-4">
+                        <strong class="secondary-font link-secondary">
+                            {{ post.post_type }}
+                        </strong>
                         <h1 class="display-5 fw-bold lh-1 text-body-emphasis mb-3">{{ post.title }}</h1>
                         <p class="lead text-body-secondary mb-4">
                             {{ post.meta_description|default:post.content|truncatechars:200 }}
@@ -59,6 +65,27 @@
     </div>
 </section>
 
+<section class="py-5">
+    <div class="container main-font">
+        <h2 class="fw-bold py-5">Explore Our Projects</h2>
+        <div class="list-group">
+            {% for project in projects %}
+            <a href="{% url 'detail-project' slug=project.slug %}" class="list-group-item list-group-item-action p-3">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="fw-bold main-font">{{ project.name }}</h5>
+                    <small class="text-muted">{{ project.created_at|date:"F d, Y" }}</small>
+                </div>
+                <p class="text-secondary main-font">{{ project.description|truncatechars:200 }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small">Click to view details</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
 <!--
 <section class="py-5">
     <div class="container main-font">

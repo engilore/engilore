@@ -11,14 +11,14 @@ from category.forms import CategoryForm, TopicForm
 
 class CategoryListView(LoginRequiredMixin, AdminRequiredMixin, ListView):
     model = Category
-    template_name = 'hub_templates/views/category_list.html'
+    template_name = 'hub_templates/views/category/category_list.html'
     context_object_name = 'categories'
     paginate_by = 20
 
 class CategoryCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     model = Category
     form_class = CategoryForm
-    template_name = 'hub_templates/views/category_create.html'
+    template_name = 'hub_templates/views/category/category_create.html'
     success_url = reverse_lazy('list-category')
 
     def form_valid(self, form):
@@ -29,7 +29,7 @@ class CategoryCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
 class CategoryUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
     model = Category
     form_class = CategoryForm
-    template_name = 'hub_templates/views/category_update.html'
+    template_name = 'hub_templates/views/category/category_update.html'
     success_url = reverse_lazy('list-category')
 
     def form_valid(self, form):
@@ -39,7 +39,7 @@ class CategoryUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
 
 class CategoryDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
     model = Category
-    template_name = 'hub_templates/views/category_delete.html'
+    template_name = 'hub_templates/views/category/category_delete.html'
     success_url = reverse_lazy('list-category')
 
     def delete(self, request, *args, **kwargs):
@@ -52,14 +52,14 @@ class CategoryDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
 
 class TopicListView(LoginRequiredMixin, AdminRequiredMixin, ListView):
     model = Topic
-    template_name = 'hub_templates/views/topic_list.html'
+    template_name = 'hub_templates/views/topic/topic_list.html'
     context_object_name = 'topics'
     paginate_by = 20
 
 class TopicCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     model = Topic
     form_class = TopicForm
-    template_name = 'hub_templates/views/topic_create.html'
+    template_name = 'hub_templates/views/topic/topic_create.html'
     success_url = reverse_lazy('list-topic')
 
     def form_valid(self, form):
@@ -70,7 +70,7 @@ class TopicCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
 class TopicUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
     model = Topic
     form_class = TopicForm
-    template_name = 'hub_templates/views/topic_update.html'
+    template_name = 'hub_templates/views/topic/topic_update.html'
     success_url = reverse_lazy('list-topic')
 
     def form_valid(self, form):
@@ -81,7 +81,7 @@ class TopicUpdateView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
 
 class TopicDeleteView(LoginRequiredMixin, AdminRequiredMixin, DeleteView):
     model = Topic
-    template_name = 'hub_templates/views/topic_delete.html'
+    template_name = 'hub_templates/views/topic/topic_delete.html'
     success_url = reverse_lazy('list-topic')
 
     def delete(self, request, *args, **kwargs):

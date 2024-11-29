@@ -11,9 +11,9 @@ SECRET_KEY = os.getenv('SECRET_KEY', 's_259_x1692o!#-bgyxp&u*5f-m%)wux1n3d8z!^yo
 if not SECRET_KEY:
     raise ValueError("SECRET_KEY environment variable not set")
 
-
 ENGILORE_ENV = os.getenv('ENGILORE_ENV', 'dev')
 
+GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
 
 DJANGO_APPS = [
     'django.contrib.admin',

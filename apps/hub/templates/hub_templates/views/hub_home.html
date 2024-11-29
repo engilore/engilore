@@ -2,41 +2,90 @@
 
 {% block content %}
 <section class="py-5">
-<div class="container">
-    <div class="py-5">
-        <h2 class="main-font">
-            Welcome to the Admin Dashboard {{ first_name }}.
-        </h2>
+    <div class="container">
+        <div class="py-5">
+            <h2 class="main-font">
+                Welcome to the Admin Dashboard {{ first_name }}.
+            </h2>
+        </div>
+        <div class="row secondary-font mb-4">
+            <div class="col-md-3">
+                <div class="card text-white bg-secondary mb-3">
+                    <div class="card-header text-center fw-bold">Users</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ users_count }}</h5>
+                        <p class="card-text">Total registered users.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-secondary mb-3">
+                    <div class="card-header text-center fw-bold">Categories</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ categories_count }}</h5>
+                        <p class="card-text">Total categories created.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-secondary mb-3">
+                    <div class="card-header text-center fw-bold">Topics</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ topics_count }}</h5>
+                        <p class="card-text">Total topics created.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-secondary mb-3">
+                    <div class="card-header text-center fw-bold">Projects</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ projects_count }}</h5>
+                        <p class="card-text">Total projects available.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row secondary-font">
+            <div class="col-12">
+                <div class="py-3">
+                    <h2 class="main-font">
+                        Project's Overview.
+                    </h2>
+                </div>
+                <div class="list-group">
+                    {% for project in projects %}
+                        {% if project.slug %}
+                            <a href="{% url 'detail-project' slug=project.slug %}" class="list-group-item list-group-item-action rounded mb-3 p-3">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1 fw-bold main-font">{{ project.name }}</h5>
+                                    <small class="main-font">{{ project.created_at|date:"F d, Y" }}</small>
+                                </div>
+                                <p class="mb-2 text-secondary main-font">{{ project.description|truncatewords:15 }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="badge bg-dark">Resources: {{ project.resource_count }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-muted small">Click to view details</span>
+                                    </div>
+                                </div>
+                            </a>
+                        {% else %}
+                            <div class="list-group-item list-group-item-action rounded mb-3 p-3">
+                                <h5 class="mb-1 fw-bold text-danger main-font">Invalid Project</h5>
+                                <p class="text-secondary small">This project has no valid slug and cannot be accessed.</p>
+                            </div>
+                        {% endif %}
+                    {% empty %}
+                        <div class="list-group-item list-group-item-action rounded mb-3 p-3 text-center">
+                            No projects available.
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="row secondary-font">
-        <div class="col-md-4">
-            <div class="card text-white bg-secondary mb-3">
-                <div class="card-header text-center fw-bold">Users</div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ users_count }}</h5>
-                    <p class="card-text">Total registered users.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white bg-secondary mb-3">
-                <div class="card-header text-center fw-bold">Categories</div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ categories_count }}</h5>
-                    <p class="card-text">Total categories created.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white bg-secondary mb-3">
-                <div class="card-header text-center fw-bold">Topics</div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ topics_count }}</h5>
-                    <p class="card-text">Total topics created.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 </section>
-{% endblock content %}
+{% endblock %}

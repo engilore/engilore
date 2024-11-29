@@ -11,11 +11,11 @@
     
     <link rel="stylesheet" type="text/css" href="{% static 'core_static/core_base.css' %}">
     
-    {% if title %}
-        <title>{{ title }} | Engilore</title>
-    {% else %}
-        <title>Engilore: From Thought to Theorem</title>
-    {% endif %}
+    <title>
+        {% block title %}
+        {{ title|default:"Engilore" }}
+        {% endblock %}
+    </title>
 </head>
 <body>
 

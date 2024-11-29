@@ -3,24 +3,34 @@
 <nav class="mt-5">
     <ul class="nav nav-tabs main-font">
         <li class="nav-item">
-          <a class="nav-link active" href="{% url 'hub-home' %}">
-            Dashboard
-          </a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'hub-home' %}active{% endif %}" href="{% url 'hub-home' %}">
+                Dashboard
+            </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'list-user' %}">
-            Users
-          </a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'list-project' %}active{% endif %}" href="{% url 'list-project' %}">
+                Projects
+            </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'list-category' %}">
-            Categories
-        </a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'list-resource' %}active{% endif %}" href="{% url 'list-resource' %}">
+                Resource
+            </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'list-topic' %}">
-            Topics
-          </a>
+            <a class="nav-link {% if request.resolver_match.url_name == 'list-user' %}active{% endif %}" href="{% url 'list-user' %}">
+                Users
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'list-category' %}active{% endif %}" href="{% url 'list-category' %}">
+                Categories
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'list-topic' %}active{% endif %}" href="{% url 'list-topic' %}">
+                Topics
+            </a>
         </li>
     </ul>
 </nav>

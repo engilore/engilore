@@ -6,14 +6,34 @@ STATUS_CHOICES = [
 ]
 
 TYPE_CHOICES = [
+    # Creative and Expressive
     ('memoir', 'Memoir'),
-    ('tutorial', 'Tutorial'),
     ('journal', 'Journal'),
+    ('poem', 'Poem'),
+    ('story', 'Story'),
+    ('manifesto', 'Manifesto'),
+    ('artwork', 'Artwork'),
+
+    # Critical and Reflective
     ('critique', 'Critique'),
     ('opinion', 'Opinion'),
+    ('review', 'Review'),
+    ('perspective', 'Perspective'),
+    ('reflection', 'Reflection'),
+
+    # Academic and Research-Oriented
     ('research', 'Research'),
-    ('news', 'News'),
-    ('how-to', 'How-To'),
-    ('story', 'Story'),
+    ('experiment', 'Experiment'),
+    ('analysis', 'Analysis'),
+    ('thesis', 'Thesis'),
+    ('case-study', 'Case-Study'),
+    ('proposal', 'Proposal'),
+    ('issue', 'Issue'),
+
+    # Instructional and Educational
+    ('tutorial', 'Tutorial'),
     ('guide', 'Guide'),
+
+    # Community and Engagement
+    ('announcement', 'Announcement'),
 ]

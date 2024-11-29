@@ -21,7 +21,6 @@
       <thead>
           <tr>
               <th>Name</th>
-              <th>Slug</th>
               <th>Description</th>
               <th>Actions</th>
           </tr>
@@ -30,7 +29,6 @@
           {% for category in categories %}
           <tr>
               <td>{{ category.name }}</td>
-              <td>{{ category.slug }}</td>
               <td>{{ category.description|truncatewords:10 }}</td>
               <td>
                   <a href="{% url 'update-category' category.pk %}" class="btn btn-sm btn-warning">Edit</a>
@@ -82,4 +80,4 @@
   {% endif %}
 </div>
 </section>
-{% endblock content %}
+{% endblock %}
