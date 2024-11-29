@@ -101,7 +101,6 @@ class Topic(models.Model):
     name = models.CharField(
         verbose_name=_('Topic Name'),
         max_length=255,
-        unique=True,
         null=False,
         blank=True
     )
