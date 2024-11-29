@@ -153,7 +153,13 @@ class Topic(models.Model):
         return self.name
 
     def generate_slug(self):
-        return slugify(self.name)
+        base_slug = slugify(self.title)
+        slug = base_slug
+        counter = 1
+
+        while Topic.objects.filter(slug=slug).exists():
+            slug = f"{base_slug}-{counter}"
+            counter += 1
 
     def generate_meta_title(self):
         return self.name
