@@ -20,17 +20,17 @@ def core_home(request):
 
 
 def core_about(request):
-    return render(request, 'core_templates/views/core_about.html', {'title': 'About'})
+    return render(request, 'core_templates/views/core_about.html')
 
 
 def view_404(request, exception):
-    return render(request, 'core_templates/errors/404.html', {'title': 'Not Found'}, status=404,)
+    return render(request, 'core_templates/errors/404.html', status=404,)
 
 def view_500(request):
-    return render(request, 'core_templates/errors/500.html', {'title': 'Internal Server Error'}, status=500)
+    return render(request, 'core_templates/errors/500.html', status=500)
 
 def view_403(request, exception):
-    return render(request, 'core_templates/errors/403.html', {'title': 'Forbidden Access'}, status=403)
+    return render(request, 'core_templates/errors/403.html', status=403)
 
 def view_400(request, exception):
-    return render(request, 'core_templates/errors/400.html', {'title': '400'}, status=400)
+    return render(request, 'core_templates/errors/400.html', status=400)

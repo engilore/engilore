@@ -13,7 +13,6 @@ if not SECRET_KEY:
 
 ENGILORE_ENV = os.getenv('ENGILORE_ENV', 'dev')
 
-GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
 
 DJANGO_APPS = [
     'django.contrib.admin',
