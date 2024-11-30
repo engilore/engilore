@@ -52,3 +52,33 @@ AWS_QUERYSTRING_AUTH = False
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file_error': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs/django-error.log',
+        },
+        'file_debug': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs/django-debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file_error'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'storages': {
+            'handlers': ['file_debug'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
