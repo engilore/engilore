@@ -11,10 +11,17 @@
   <a href="{% url 'create-topic' %}" class="btn btn-primary mb-3">Create New Topic</a>
 
   <form method="GET" class="mb-3">
-      <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search topics..." value="{{ request.GET.q }}">
-          <button type="submit" class="btn btn-secondary">Search</button>
-      </div>
+    <div class="input-group">
+        <input 
+            type="text" 
+            name="q" 
+            class="form-control" 
+            placeholder="Search topics..." 
+            value="{{ request.GET.q|default_if_none:'' }}" 
+            aria-label="Search Topics"
+        >
+        <button type="submit" class="btn btn-secondary">Search</button>
+    </div>
   </form>
 
   <table class="table table-striped">
@@ -50,7 +57,7 @@
       <ul class="pagination">
         {% if page_obj.has_previous %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+            <a class="page-link" href="?q={{ request.GET.q }}&page={{ page_obj.previous_page_number }}" aria-label="Previous">
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>
@@ -59,16 +66,18 @@
             <span class="page-link">&laquo;</span>
           </li>
         {% endif %}
+
         {% for num in paginator.page_range %}
           {% if page_obj.number == num %}
             <li class="page-item active"><span class="page-link">{{ num }}</span></li>
           {% else %}
-            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+            <li class="page-item"><a class="page-link" href="?q={{ request.GET.q }}&page={{ num }}">{{ num }}</a></li>
           {% endif %}
         {% endfor %}
+
         {% if page_obj.has_next %}
           <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+            <a class="page-link" href="?q={{ request.GET.q }}&page={{ page_obj.next_page_number }}" aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
             </a>
           </li>

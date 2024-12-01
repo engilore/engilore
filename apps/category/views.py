@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.db.models import Q
 from django.views.generic import ListView, CreateView
 from django.views.generic.edit import UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -14,6 +15,18 @@ class CategoryListView(LoginRequiredMixin, AdminRequiredMixin, ListView):
     template_name = 'hub_templates/views/category/category_list.html'
     context_object_name = 'categories'
     paginate_by = 20
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('q', '').strip()
+
+        if search_query:
+            queryset = queryset.filter(
+                Q(name__icontains=search_query) |
+                Q(description__icontains=search_query)
+            )
+        
+        return queryset.order_by('name')
 
 class CategoryCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     model = Category
@@ -55,6 +68,19 @@ class TopicListView(LoginRequiredMixin, AdminRequiredMixin, ListView):
     template_name = 'hub_templates/views/topic/topic_list.html'
     context_object_name = 'topics'
     paginate_by = 20
+
+    def get_queryset(self):
+        queryset = super().get_queryset().select_related('category')
+        search_query = self.request.GET.get('q', '').strip()
+
+        if search_query:
+            queryset = queryset.filter(
+                Q(name__icontains=search_query) |
+                Q(description__icontains=search_query) |
+                Q(category__name__icontains=search_query)
+            )
+
+        return queryset.order_by('name')
 
 class TopicCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     model = Topic
