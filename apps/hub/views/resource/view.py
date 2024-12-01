@@ -1,7 +1,9 @@
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.db.models import Q
+
 from django.views.generic import (
-    ListView, DetailView, CreateView, UpdateView, DeleteView
+    ListView, CreateView, UpdateView, DeleteView
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
 from argus.permissions import AdminRequiredMixin
@@ -17,8 +19,18 @@ class ResourceListView(LoginRequiredMixin, AdminRequiredMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        return Resource.objects.all().order_by('created_at')
+        queryset = super().get_queryset().select_related('project')
+        search_query = self.request.GET.get('q', '').strip()
 
+        if search_query:
+            queryset = queryset.filter(
+                Q(name__icontains=search_query) |
+                Q(project__name__icontains=search_query) |
+                Q(url__icontains=search_query)
+            )
+
+        return queryset.order_by('created_at')
+    
 class ResourceCreateView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
     model = Resource
     form_class = ResourceForm
