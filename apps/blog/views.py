@@ -44,10 +44,6 @@ class BlogHomeView(TemplateView):
         return User.objects.filter(is_engilorian=True)
 
     def get_archives(self):
-        from calendar import month_name
-        from django.db.models.functions import ExtractYear, ExtractMonth
-        from django.db.models import Count
-
         archives = (
             BlogPost.objects.filter(status='published')
             .annotate(
@@ -200,6 +196,8 @@ class BlogPostUpdateView(EngilorianRequiredMixin, LoginRequiredMixin, UserPasses
         kwargs = super().get_form_kwargs()
         if self.request.POST.get('category'):
             kwargs['category_id'] = self.request.POST.get('category')
+        else:
+            kwargs['category_id'] = self.object.category_id 
         return kwargs
 
     def get_context_data(self, **kwargs):
