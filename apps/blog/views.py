@@ -125,7 +125,6 @@ class BlogPostListView(ListView):
             'selected_month': self.request.GET.get('month'),
         }
 
-
 class BlogPostCreateView(EngilorianRequiredMixin, LoginRequiredMixin, CreateView):
     model = BlogPost
     form_class = BlogPostForm
@@ -134,34 +133,26 @@ class BlogPostCreateView(EngilorianRequiredMixin, LoginRequiredMixin, CreateView
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
         if self.request.POST.get('category'):
             kwargs['category_id'] = self.request.POST.get('category')
         return kwargs
 
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        if self.request.user.is_admin:
+            form.instance.is_featured = self.request.POST.get('is_featured') == 'on'
+            form.instance.is_spotlighted = self.request.POST.get('is_spotlighted') == 'on'
+        else:
+            form.instance.is_featured = False
+            form.instance.is_spotlighted = False
+        return super().form_valid(form)
+
     def get_context_data(self, **kwargs):
-        self.object = None
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
         return context
 
-    def post(self, request, *args, **kwargs):
-        action = request.POST.get('action', 'create_post')
-        if action == 'update_topics':
-            form = self.get_form()
-            for field in ['title', 'content', 'post_type', 'status', 'is_featured', 'is_spotlighted']:
-                form.fields[field].required = False
-            if form.is_valid():
-                return self.render_to_response(self.get_context_data(form=form))
-            else:
-                return self.render_to_response(self.get_context_data(form=form))
-        else:
-            return super().post(request, *args, **kwargs)
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        form.instance.is_featured = self.request.POST.get('is_featured') == 'on'
-        form.instance.is_spotlighted = self.request.POST.get('is_spotlighted') == 'on'
-        return super().form_valid(form)
 
 class BlogPostDetailView(DetailView):
     model = BlogPost
@@ -187,44 +178,33 @@ class BlogPostUpdateView(EngilorianRequiredMixin, LoginRequiredMixin, UserPasses
 
     def test_func(self):
         blog_post = self.get_object()
-        return blog_post.author == self.request.user
-
-    def get_success_url(self):
-        return reverse_lazy('detail-blog-post', kwargs={'slug': self.object.slug})
+        return blog_post.author == self.request.user or self.request.user.is_admin
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
         if self.request.POST.get('category'):
             kwargs['category_id'] = self.request.POST.get('category')
         else:
             kwargs['category_id'] = self.object.category_id 
         return kwargs
 
+    def form_valid(self, form):
+        if self.request.user.is_admin:
+            form.instance.is_featured = self.request.POST.get('is_featured') == 'on'
+            form.instance.is_spotlighted = self.request.POST.get('is_spotlighted') == 'on'
+        else:
+            form.instance.is_featured = self.object.is_featured
+            form.instance.is_spotlighted = self.object.is_spotlighted
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('detail-blog-post', kwargs={'slug': self.object.slug})
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
         return context
-
-    def post(self, request, *args, **kwargs):
-        action = request.POST.get('action', 'update_post')
-        if action == 'update_topics':
-            self.object = self.get_object()
-            
-            form = self.get_form()
-            for field in ['title', 'content', 'post_type', 'status', 'is_featured', 'is_spotlighted']:
-                if field in form.fields:
-                    form.fields[field].required = False
-            if form.is_valid():
-                return self.render_to_response(self.get_context_data(form=form))
-            else:
-                return self.render_to_response(self.get_context_data(form=form))
-        else:
-            return super().post(request, *args, **kwargs)
-
-    def form_valid(self, form):
-        form.instance.is_featured = self.request.POST.get('is_featured') == 'on'
-        form.instance.is_spotlighted = self.request.POST.get('is_spotlighted') == 'on'
-        return super().form_valid(form)
 
 
 class BlogPostDeleteView(EngilorianRequiredMixin, LoginRequiredMixin, UserPassesTestMixin, DeleteView):
