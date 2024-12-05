@@ -3,7 +3,6 @@ from django import forms
 from category.models import Topic
 from blog.models import BlogPost
 
-
 class BlogPostForm(forms.ModelForm):
     class Meta:
         model = BlogPost
@@ -23,9 +22,14 @@ class BlogPostForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
         category_id = kwargs.pop('category_id', None)
         super().__init__(*args, **kwargs)
         if category_id:
             self.fields['topics'].queryset = Topic.objects.filter(category_id=category_id)
         else:
             self.fields['topics'].queryset = Topic.objects.none()
+
+        if not self.user.is_admin:
+            self.fields.pop('is_featured')
+            self.fields.pop('is_spotlighted')
