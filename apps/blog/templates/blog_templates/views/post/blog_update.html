@@ -1,14 +1,15 @@
 {% extends "blog_templates/blog_base.html" %}
+{% load static %}
 
 {% block title %}
-Create Blog Post
+Update Blog Post
 {% endblock %}
 
 {% block content %}
 <section class="py-5 core-bg-accent min-vh-100">
-    <div class="container secondary-font">
+    <div class="container">
         <div class="py-5 text-center">
-            <h2 class="main-font">Create a Post Engilorian.</h2>
+            <h2 class="main-font">Update Blog Post Engilorian</h2>
         </div>
 
         {% if form.non_field_errors %}
@@ -35,60 +36,64 @@ Create Blog Post
 
         <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
             {% csrf_token %}
+            {{ form.non_field_errors }}
 
             <div class="mb-4">
-                <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
+                <label for="{{ form.title.id_for_label }}" class="form-label">Title <span class="text-danger">*</span></label>
                 {{ form.title }}
                 <div class="invalid-feedback">Title is required.</div>
             </div>
 
             <div class="mb-4">
-                <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
-                <select class="form-select" id="category" name="category" required>
-                    <option value="">Select a Category</option>
-                    {% for category in categories %}
-                    <option value="{{ category.id }}" {% if form.category.value == category.id|stringformat:"s" %}selected{% endif %}>
-                        {{ category.name }}
-                    </option>
-                    {% endfor %}
-                </select>
+                <label for="{{ form.category.id_for_label }}" class="form-label">Category <span class="text-danger">*</span></label>
+                {{ form.category }}
                 <div class="invalid-feedback">Please select a category.</div>
             </div>
 
             <button type="submit" name="action" value="update_topics" class="btn btn-secondary mb-4">Update Topics</button>
 
             <div class="mb-4">
-                <label for="topics" class="form-label">Topics</label>
-                <select class="form-select" id="topics" name="topics" multiple>
-                    {% for topic in form.fields.topics.queryset %}
-                    <option value="{{ topic.id }}" {% if topic.id|stringformat:"s" in form.topics.value %}selected{% endif %}>
-                        {{ topic.name }}
-                    </option>
-                    {% endfor %}
-                </select>
+                <label for="{{ form.topics.id_for_label }}" class="form-label">Topics</label>
+                {{ form.topics }}
                 <div class="form-text">Hold down Ctrl (Windows) or Command (Mac) to select multiple topics.</div>
             </div>
 
             <div class="mb-4">
-                <label for="post_type" class="form-label">Post Type <span class="text-danger">*</span></label>
+                <label for="volume" class="form-label">Volume</label>
+                <select class="form-select" id="volume" name="volume">
+                    <option value="">Select a Volume (Optional)</option>
+                    {% for volume in form.fields.volume.queryset %}
+                    <option value="{{ volume.id }}" {% if volume.id|stringformat:"s" == form.volume.value|stringformat:"s" %}selected{% endif %}>
+                        Volume {{ volume.number }}: {{ volume.title }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <div class="form-text">Optional. Assign this post to a volume.</div>
+            </div>
+
+            <div class="mb-4">
+                <label for="{{ form.post_type.id_for_label }}" class="form-label">Post Type <span class="text-danger">*</span></label>
                 {{ form.post_type }}
                 <div class="invalid-feedback">Please select a post type.</div>
             </div>
 
             <div class="mb-4">
-                <label for="content" class="form-label">Content <span class="text-danger">*</span></label>
+                <label for="{{ form.content.id_for_label }}" class="form-label">Content <span class="text-danger">*</span></label>
                 {{ form.content }}
                 <div class="invalid-feedback">Content is required.</div>
             </div>
 
             <div class="mb-4">
-                <label for="thumbnail" class="form-label">Thumbnail</label>
+                <label for="{{ form.thumbnail.id_for_label }}" class="form-label">Thumbnail</label>
                 {{ form.thumbnail }}
+                {% if object.thumbnail %}
+                    <img src="{{ object.thumbnail.url }}" alt="Current Thumbnail" class="img-thumbnail mt-2" style="max-width: 200px;">
+                {% endif %}
                 <div class="form-text">Optional. Upload an image for the blog post.</div>
             </div>
 
             <div class="mb-4">
-                <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
+                <label for="{{ form.status.id_for_label }}" class="form-label">Status <span class="text-danger">*</span></label>
                 {{ form.status }}
                 <div class="invalid-feedback">Please select a status.</div>
             </div>
@@ -96,20 +101,20 @@ Create Blog Post
             {% if user.is_admin %}
                 <div class="form-check mb-4">
                     {{ form.is_featured }}
-                    <label for="{{ form.is_featured.id_for_label }}" class="form-check-label">Is Featured</label>
+                    <label for="{{ form.is_featured.id_for_label }}" class="form-check-label">Feature this Post</label>
                 </div>
 
                 <div class="form-check mb-4">
                     {{ form.is_spotlighted }}
-                    <label for="{{ form.is_spotlighted.id_for_label }}" class="form-check-label">Is Spotlighted</label>
+                    <label for="{{ form.is_spotlighted.id_for_label }}" class="form-check-label">Spotlight this Post</label>
                 </div>
             {% endif %}
 
             <div class="d-flex justify-content-between">
-                <button type="submit" name="action" value="create_post" class="btn btn-primary">Create Post</button>
-                <a href="{% url 'blog-posts' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" name="action" value="update_post" class="btn btn-success">Update Post</button>
+                <a href="{% url 'detail-blog-post' slug=object.slug %}" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div>
 </section>
-{% endblock content %}
+{% endblock %}

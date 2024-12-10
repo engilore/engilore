@@ -2,126 +2,125 @@
 
 {% block content %}
 <section>
-<div class="container">
+    <div class="container">
 
-    {% if spotlighted_post %}
-    <a href="{% url 'detail-blog-post' slug=spotlighted_post.slug %}" class="text-decoration-none">
-        <div class="p-4 p-md-5 mb-4 rounded text-dark core-bg-accent">
-            <div class="col-lg-6">
-                <h1 class="main-font">
-                    {{ spotlighted_post.title }}
-                </h1>
-                <p class="main-font">
-                    by <strong>{{ spotlighted_post.author.first_name }} {{ spotlighted_post.author.last_name }}</strong>
-                </p>
-                <p class="main-font my-3">
-                    {{ spotlighted_post.meta_description }}
-                </p>
-            </div>
-        </div>
-        </a>
-    {% endif %}
-
-    <div class="row mb-2 h-100">
-        {% for post in featured_posts %}
-        <div class="col-md-6">
-            <a href="{% url 'detail-blog-post' slug=post.slug %}" class="text-decoration-none">
-            <div class="row g-0 border rounded overflow-hidden mb-4 shadow-sm">
-                {% if post.thumbnail %}
-                <div class="col-5">
-                    <img src="{{ post.thumbnail.url }}" class="img-fluid w-100 h-100" alt="{{ post.title }}">
+        {% if spotlighted_post %}
+        <a href="{% url 'detail-blog-post' slug=spotlighted_post.slug %}" class="text-decoration-none">
+            <div class="p-4 p-md-5 mb-4 rounded text-dark core-bg-accent">
+                <div class="col-lg-6">
+                    <h1 class="main-font">
+                        {{ spotlighted_post.title }}
+                    </h1>
+                    <p class="main-font">
+                        by <strong>{{ spotlighted_post.author.first_name }} {{ spotlighted_post.author.last_name }}</strong>
+                    </p>
+                    <p class="main-font my-3">
+                        {{ spotlighted_post.meta_description }}
+                    </p>
                 </div>
-                <div class="col-7 p-4 d-flex flex-column justify-content-between">
-                {% else %}
-                <div class="col p-4 d-flex flex-column justify-content-between">
-                {% endif %}
-                    <div>
-                        <strong class="secondary-font link-secondary">
-                            {{ post.post_type }}
-                        </strong>
-                        <h3 class="main-font fw-bold link-dark">
-                            {{ post.title }}
-                        </h3>
-                        <div class="secondary-font link-dark">
-                            {{ post.published_at|date:"F d, Y" }}
+            </div>
+        </a>
+        {% endif %}
+
+        <div class="row mb-2 h-100">
+            {% for post in featured_posts %}
+            <div class="col-md-6">
+                <a href="{% url 'detail-blog-post' slug=post.slug %}" class="text-decoration-none">
+                    <div class="row g-0 border rounded overflow-hidden mb-4 shadow-sm">
+                        {% if post.thumbnail %}
+                        <div class="col-5">
+                            <img src="{{ post.thumbnail.url }}" class="img-fluid w-100 h-100" alt="{{ post.title }}">
+                        </div>
+                        <div class="col-7 p-4 d-flex flex-column justify-content-between">
+                        {% else %}
+                        <div class="col p-4 d-flex flex-column justify-content-between">
+                        {% endif %}
+                            <div>
+                                <strong class="secondary-font link-secondary">
+                                    {{ post.post_type }}
+                                </strong>
+                                <h3 class="main-font fw-bold link-dark">
+                                    {{ post.title }}
+                                </h3>
+                                <div class="secondary-font link-dark">
+                                    {{ post.published_at|date:"F d, Y" }}
+                                </div>
+                            </div>
+                            <small class="pt-3">
+                                <span class="badge bg-secondary">{{ post.category.name }}</span>
+                                {% for topic in post.topics.all %}
+                                <span class="badge rounded-pill bg-secondary">{{ topic.name }}</span>
+                                {% endfor %}
+                            </small>
                         </div>
                     </div>
-                    <small class="pt-3">
-                        <span class="badge bg-secondary">{{ post.category.name }}</span>
-                        {% for topic in post.topics.all %}
-                        <span class="badge rounded-pill bg-secondary">{{ topic.name }}</span>
-                        {% endfor %}
-                    </small>
-                </div>
+                </a>
             </div>
-            </a>
-        </div>
-        {% endfor %}
-    </div>
-    
-    
-    <div class="row g-5">
-        <div class="col-md-8">
-            <div class="mb-4 py-4">
-                <h3 class="fst-italic main-font text-secondary">From the Engilorians</h3>
-            </div>
-            {% for post in recent_posts %}
-            <article class="mb-4">
-                <h2 class="main-font mb-1">
-                    <a href="{% url 'detail-blog-post' slug=post.slug %}" class="link-body-emphasis">{{ post.title }}</a>
-                </h2>
-                <p class="secondary-font mt-2">
-                    {{ post.published_at|date:"F d, Y" }} by <a href="{% url 'account-profile' username=post.author.username %}" class="main-font link-secondary">{{ post.author.first_name }} {{ post.author.last_name }}</a>
-                </p>
-                <p class="main-font text-secondary">{{ post.meta_description|truncatewords:30 }}</p>
-            </article>
             {% endfor %}
         </div>
 
-        <div class="col-md-4">
-            <div class="position-sticky">
-                <div class="p-4 rounded core-bg-secondary">
-                    <h4 class="text-white fst-italic main-font">Engilorians</h4>
-                    {% if engilorians %}
-                    <ul class="list-group">
-                        {% for engilorian in engilorians %}
-                        <li class="list-group-item">
-                            <a href="{% url 'account-profile' username=engilorian.username %}" class="text-decoration-none link-secondary fw-bold main-font">
-                                {{ engilorian.first_name }} {{ engilorian.last_name }}
-                            </a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                    {% else %}
-                    <p class="text-muted">No Engilorians found.</p>
-                    {% endif %}
+        <div class="row g-5">
+            <div class="col-md-8">
+                <div class="mb-4 py-4">
+                    <h3 class="fst-italic main-font text-secondary">From the Engilorians</h3>
                 </div>
-                <div class="p-4">
-                    <h4 class="fst-italic main-font">Archives</h4>
-                    <ol class="list-unstyled mb-0">
-                        {% for archive in archives %}
-                        <li>
-                            <a href="{% url 'blog-posts' %}?year={{ archive.year }}&month={{ archive.month }}" class="link-secondary main-font">
-                                {{ archive.month_name }} {{ archive.year }} <strong>({{ archive.post_count }})</strong>
-                            </a>
-                        </li>
-                        {% endfor %}
-                    </ol>
-                </div>
-                <div class="p-4">
-                    <h4 class="fst-italic main-font">Elsewhere</h4>
-                    <ol class="list-unstyled">
-                        <li><a href="https://nebulei.com/" target="_blank" class="link-secondary main-font">Nebulei</a></li>
-                        <li><a href="https://github.com/engilore" target="_blank" class="link-secondary main-font">GitHub</a></li>
-                        <li><a href="https://www.youtube.com/@engilore" target="_blank" class="link-secondary main-font">Youtube</a></li>
-                        <li><a href="https://x.com/engilore" target="_blank" class="link-secondary main-font">X / Twitter</a></li>
-                    </ol>
+                {% for post in recent_posts %}
+                <article class="mb-4">
+                    <h2 class="main-font mb-1">
+                        <a href="{% url 'detail-blog-post' slug=post.slug %}" class="link-body-emphasis">{{ post.title }}</a>
+                    </h2>
+                    <p class="secondary-font mt-2">
+                        {{ post.published_at|date:"F d, Y" }} by <a href="{% url 'account-profile' username=post.author.username %}" class="main-font link-secondary">{{ post.author.first_name }} {{ post.author.last_name }}</a>
+                    </p>
+                    <p class="main-font text-secondary">{{ post.meta_description|truncatewords:30 }}</p>
+                </article>
+                {% endfor %}
+            </div>
+
+            <div class="col-md-4">
+                <div class="position-sticky">
+                    <div class="p-4 rounded core-bg-secondary">
+                        <h4 class="text-white fst-italic main-font">Engilorians</h4>
+                        {% if engilorians %}
+                        <ul class="list-group">
+                            {% for engilorian in engilorians %}
+                            <li class="list-group-item">
+                                <a href="{% url 'account-profile' username=engilorian.username %}" class="text-decoration-none link-secondary fw-bold main-font">
+                                    {{ engilorian.first_name }} {{ engilorian.last_name }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="text-muted">No Engilorians found.</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="p-4">
+                        <h4 class="fst-italic main-font">Archives</h4>
+                        <ol class="list-unstyled mb-0">
+                            {% for archive in archives %}
+                            <li>
+                                <a href="{% url 'blog-posts' %}?year={{ archive.year }}&month={{ archive.month }}" class="link-secondary main-font">
+                                    {{ archive.month_name }} {{ archive.year }} <strong>({{ archive.post_count }})</strong>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+
+                    <div class="p-4">
+                        <h4 class="fst-italic main-font">Elsewhere</h4>
+                        <ol class="list-unstyled">
+                            <li><a href="https://nebulei.com/" target="_blank" class="link-secondary main-font">Nebulei</a></li>
+                            <li><a href="https://github.com/engilore" target="_blank" class="link-secondary main-font">GitHub</a></li>
+                            <li><a href="https://www.youtube.com/@engilore" target="_blank" class="link-secondary main-font">Youtube</a></li>
+                            <li><a href="https://x.com/engilore" target="_blank" class="link-secondary main-font">X / Twitter</a></li>
+                        </ol>
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
-
-</div>
 </section>
 {% endblock %}

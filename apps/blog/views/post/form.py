@@ -1,14 +1,15 @@
 from django import forms
 
 from category.models import Topic
-from blog.models import BlogPost
+from blog.models import BlogPost, Volume
+
 
 class BlogPostForm(forms.ModelForm):
     class Meta:
         model = BlogPost
         fields = [
             'title', 'content', 'thumbnail', 'status', 
-            'category', 'topics', 'post_type', 'is_featured', 
+            'category', 'topics', 'post_type', 'volume', 'is_featured', 
             'is_spotlighted'
         ]
         widgets = {
@@ -19,6 +20,7 @@ class BlogPostForm(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form-select'}),
             'topics': forms.SelectMultiple(attrs={'class': 'form-select'}),
             'post_type': forms.Select(attrs={'class': 'form-select'}),
+            'volume': forms.Select(attrs={'class': 'form-select'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -33,3 +35,6 @@ class BlogPostForm(forms.ModelForm):
         if not self.user.is_admin:
             self.fields.pop('is_featured')
             self.fields.pop('is_spotlighted')
+
+        self.fields['volume'].queryset = Volume.objects.all()
+        self.fields['volume'].required = False
