@@ -8,6 +8,42 @@ from category.models import Category, Topic
 from blog.constants import STATUS_CHOICES, TYPE_CHOICES
 
 
+class Volume(models.Model):
+    number = models.PositiveIntegerField(
+        verbose_name=_('Volume Number'),
+        unique=True
+    )
+    title = models.CharField(
+        verbose_name=_('Title'),
+        max_length=255,
+        unique=True
+    )
+    description = models.TextField(
+        verbose_name=_('Description'),
+        blank=True,
+        null=True
+    )
+    slug = models.SlugField(
+        verbose_name=_('Slug'),
+        max_length=255,
+        unique=True,
+        blank=True
+    )
+
+    class Meta:
+        verbose_name = _('Volume')
+        verbose_name_plural = _('Volumes')
+        ordering = ['-number']
+
+    def __str__(self):
+        return f"Volume {self.number}: {self.title}"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(f"volume-{self.number}-{self.title}")
+        super().save(*args, **kwargs)
+
+
 class BlogPost(models.Model):
     title = models.CharField(
         verbose_name=_('Title'),
@@ -62,10 +98,13 @@ class BlogPost(models.Model):
         null=True,
         blank=True,
     )
-    volume = models.PositiveIntegerField(
+    volume = models.ForeignKey(
+        Volume,
         verbose_name=_('Volume'),
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
+        related_name='blog_posts'
     )
     meta_title = models.CharField(
         verbose_name=_('Meta Title'),

@@ -1,0 +1,98 @@
+{% extends "hub_templates/hub_base.html" %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container secondary-font">
+        <div class="py-5">
+            <h2 class="main-font">
+                Volumes
+            </h2>
+        </div>
+        <a href="{% url 'create-volume' %}" class="btn btn-primary mb-3">Create New Volume</a>
+
+        <form method="GET" class="mb-3">
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    name="q" 
+                    class="form-control" 
+                    placeholder="Search volumes..." 
+                    value="{{ search_query }}" 
+                    aria-label="Search Volumes"
+                >
+                <button type="submit" class="btn btn-secondary">Search</button>
+            </div>
+        </form>
+
+        {% if volumes %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Number</th>
+                        <th>Title</th>
+                        <th>Release Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for volume in volumes %}
+                    <tr>
+                        <td>{{ volume.number }}</td>
+                        <td>{{ volume.title }}</td>
+                        <td>{{ volume.release_date|date:"F d, Y" }}</td>
+                        <td>
+                            <a href="{% url 'update-volume' slug=volume.slug %}" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="{% url 'delete-volume' slug=volume.slug %}" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% if is_paginated %}
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if volumes.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?q={{ search_query }}&page={{ volumes.previous_page_number }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </span>
+                            </li>
+                        {% endif %}
+
+                        {% for num in volumes.paginator.page_range %}
+                            {% if volumes.number == num %}
+                                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                            {% elif num > volumes.number|add:'-3' and num < volumes.number|add:'3' %}
+                                <li class="page-item"><a class="page-link" href="?q={{ search_query }}&page={{ num }}">{{ num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if volumes.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?q={{ search_query }}&page={{ volumes.next_page_number }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% else %}
+            <p>No volumes found.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

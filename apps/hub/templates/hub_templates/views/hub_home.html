@@ -5,43 +5,72 @@
     <div class="container">
         <div class="py-5">
             <h2 class="main-font">
-                Welcome to the Admin Dashboard {{ first_name }}.
+                Welcome to the Admin Dashboard <strong>{{ first_name }}</strong>.
             </h2>
         </div>
+        
         <div class="row secondary-font mb-4">
             <div class="col-md-3">
-                <div class="card text-white bg-secondary mb-3">
+                <div class="card text-dark bg-light mb-3">
                     <div class="card-header text-center fw-bold">Users</div>
                     <div class="card-body">
                         <h5 class="card-title">{{ users_count }}</h5>
                         <p class="card-text">Total registered users.</p>
+                        <div class="d-grid gap-2 mx-auto">
+                            <a href="{% url 'list-user' %}" class="btn btn-secondary btn-sm">Manage Users</a>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-white bg-secondary mb-3">
+                <div class="card text-dark bg-light mb-3">
                     <div class="card-header text-center fw-bold">Categories</div>
                     <div class="card-body">
                         <h5 class="card-title">{{ categories_count }}</h5>
                         <p class="card-text">Total categories created.</p>
+                        <div class="d-grid gap-2 mx-auto">
+                            <a href="{% url 'list-category' %}" class="btn btn-secondary btn-sm">Manage Categories</a>
+                            <a href="{% url 'create-category' %}" class="btn btn-success btn-sm">Create Category</a>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-white bg-secondary mb-3">
+                <div class="card text-dark bg-light mb-3">
                     <div class="card-header text-center fw-bold">Topics</div>
                     <div class="card-body">
                         <h5 class="card-title">{{ topics_count }}</h5>
                         <p class="card-text">Total topics created.</p>
+                        <div class="d-grid gap-2 mx-auto">
+                            <a href="{% url 'list-topic' %}" class="btn btn-secondary btn-sm">Manage Topics</a>
+                            <a href="{% url 'create-topic' %}" class="btn btn-success btn-sm">Create Topic</a>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-white bg-secondary mb-3">
+                <div class="card text-dark bg-light mb-3">
                     <div class="card-header text-center fw-bold">Projects</div>
                     <div class="card-body">
                         <h5 class="card-title">{{ projects_count }}</h5>
                         <p class="card-text">Total projects available.</p>
+                        <div class="d-grid gap-2 mx-auto">
+                            <a href="{% url 'list-project' %}" class="btn btn-secondary btn-sm">Manage Projects</a>
+                            <a href="{% url 'create-project' %}" class="btn btn-success btn-sm">Create Project</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-dark bg-light mb-3">
+                    <div class="card-header text-center fw-bold">Volumes</div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ volumes_count }}</h5>
+                        <p class="card-text">Total volumes created.</p>
+                        <div class="d-grid gap-2 mx-auto">
+                            <a href="{% url 'list-volume' %}" class="btn btn-secondary btn-sm">Manage Volumes</a>
+                            <a href="{% url 'create-volume' %}" class="btn btn-success btn-sm">Create Volume</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -65,7 +94,7 @@
                                 <p class="mb-2 text-secondary main-font">{{ project.description|truncatewords:15 }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <span class="badge bg-dark">Resources: {{ project.resource_count }}</span>
+                                        <span class="badge bg-secondary">Resources: {{ project.resource_count }}</span>
                                     </div>
                                     <div>
                                         <span class="text-muted small">Click to view details</span>
@@ -84,6 +113,41 @@
                         </div>
                     {% endfor %}
                 </div>
+            </div>
+        </div>
+        
+        <div class="row secondary-font mt-5">
+            <div class="col-12">
+                <div class="py-3">
+                    <h2 class="main-font">
+                        Volumes Overview.
+                    </h2>
+                </div>
+                {% if volumes %}
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Number</th>
+                                <th>Title</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for volume in volumes %}
+                                <tr>
+                                    <td>{{ volume.number }}</td>
+                                    <td>{{ volume.title }}</td>
+                                    <td>
+                                        <a href="{% url 'update-volume' slug=volume.slug %}" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="{% url 'delete-volume' slug=volume.slug %}" class="btn btn-danger btn-sm">Delete</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No volumes available. <a href="{% url 'create-volume' %}">Create one now.</a></p>
+                {% endif %}
             </div>
         </div>
     </div>

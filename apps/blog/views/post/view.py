@@ -1,69 +1,19 @@
-from calendar import month_name
-
 from django.urls import reverse_lazy
 from django.http import HttpResponseForbidden
-from django.db.models import Count, Q
-from django.db.models.functions import ExtractYear, ExtractMonth
+from django.db.models import Q
 from django.utils.dateparse import parse_date
-from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, DetailView, ListView
+from django.views.generic import CreateView, UpdateView, DeleteView, DetailView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
-from account.models import User
 from argus.permissions import EngilorianRequiredMixin
 from category.models import Category, Topic
-from blog.models import BlogPost
-from blog.forms import BlogPostForm
-
-
-class BlogHomeView(TemplateView):
-    template_name = 'blog_templates/views/blog_home.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        context['spotlighted_post'] = self.get_spotlighted_post()
-        context['featured_posts'] = self.get_featured_posts()
-        context['recent_posts'] = self.get_recent_posts(context['spotlighted_post'], context['featured_posts'])
-        context['engilorians'] = self.get_engilorians()
-        context['archives'] = self.get_archives()
-
-        return context
-
-    def get_spotlighted_post(self):
-        return BlogPost.objects.filter(is_spotlighted=True, status='published').first()
-
-    def get_featured_posts(self):
-        return BlogPost.objects.filter(is_featured=True, status='published').exclude(is_spotlighted=True)[:2]
-
-    def get_recent_posts(self, spotlighted_post, featured_posts):
-        excluded_ids = [spotlighted_post.id] if spotlighted_post else []
-        excluded_ids += [post.id for post in featured_posts]
-        return BlogPost.objects.filter(status='published').exclude(id__in=excluded_ids).order_by('-published_at')[:5]
-
-    def get_engilorians(self):
-        return User.objects.filter(is_engilorian=True)
-
-    def get_archives(self):
-        archives = (
-            BlogPost.objects.filter(status='published')
-            .annotate(
-                year=ExtractYear('published_at'),
-                month=ExtractMonth('published_at')
-            )
-            .values('year', 'month')
-            .annotate(post_count=Count('id'))
-            .order_by('-year', '-month')
-        )
-
-        for archive in archives:
-            archive['month_name'] = month_name[archive['month']]
-
-        return archives
+from blog.models import BlogPost, Volume
+from blog.views.post.form import BlogPostForm
     
 
 class BlogPostListView(ListView):
     model = BlogPost
-    template_name = 'blog_templates/views/blog_list.html'
+    template_name = 'blog_templates/views/post/blog_list.html'
     context_object_name = 'blogposts'
     paginate_by = 10
 
@@ -128,7 +78,7 @@ class BlogPostListView(ListView):
 class BlogPostCreateView(EngilorianRequiredMixin, LoginRequiredMixin, CreateView):
     model = BlogPost
     form_class = BlogPostForm
-    template_name = 'blog_templates/views/blog_create.html'
+    template_name = 'blog_templates/views/post/blog_create.html'
     success_url = reverse_lazy('blog-home')
 
     def get_form_kwargs(self):
@@ -151,12 +101,13 @@ class BlogPostCreateView(EngilorianRequiredMixin, LoginRequiredMixin, CreateView
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
+        context['volumes'] = Volume.objects.all()
         return context
 
 
 class BlogPostDetailView(DetailView):
     model = BlogPost
-    template_name = 'blog_templates/views/blog_post.html'
+    template_name = 'blog_templates/views/post/blog_post.html'
     context_object_name = 'blogpost'
 
     def get_queryset(self):
@@ -174,7 +125,7 @@ class BlogPostDetailView(DetailView):
 class BlogPostUpdateView(EngilorianRequiredMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = BlogPost
     form_class = BlogPostForm
-    template_name = 'blog_templates/views/blog_update.html'
+    template_name = 'blog_templates/views/post/blog_update.html'
 
     def test_func(self):
         blog_post = self.get_object()
@@ -204,12 +155,13 @@ class BlogPostUpdateView(EngilorianRequiredMixin, LoginRequiredMixin, UserPasses
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
+        context['volumes'] = Volume.objects.all()
         return context
 
 
 class BlogPostDeleteView(EngilorianRequiredMixin, LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = BlogPost
-    template_name = 'blog_templates/views/blog_delete.html'
+    template_name = 'blog_templates/views/post/blog_delete.html'
     success_url = reverse_lazy('blog-posts')
 
     def test_func(self):
