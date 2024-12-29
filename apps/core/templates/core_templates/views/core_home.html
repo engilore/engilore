@@ -67,6 +67,32 @@
 
 <section class="py-5">
     <div class="container main-font">
+        <h2 class="fw-bold py-5">Recent Posts</h2>
+        <div class="row g-4">
+            {% for post in recent_posts %}
+            <div class="col-md-6">
+                <div class="bg-white p-4 rounded-3 border shadow-sm">
+                    <h3 class="fw-bold">{{ post.title }}</h3>
+                    <p class="text-secondary mb-3">
+                        {{ post.meta_description|default:post.content|truncatechars:150 }}
+                    </p>
+                    <a href="{% url 'detail-blog-post' post.slug %}" class="btn btn-outline-primary btn-sm">
+                        Read more
+                    </a>
+                    <p class="text-muted small mt-2">
+                        Published on {{ post.published_at|date:"F j, Y" }}
+                    </p>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-muted text-center">No recent posts available at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container main-font">
         <h2 class="fw-bold py-5">Explore Our Projects</h2>
         <div class="list-group">
             {% for project in projects %}
