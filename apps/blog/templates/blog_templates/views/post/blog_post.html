@@ -8,9 +8,9 @@
 <article class="min-vh-100">
     <section class="px-4 py-5 core-bg-accent">
         <div class="container col-xxl-8">
-            <header class="row align-items-center g-5 py-5">
+            <header class="row align-items-center py-3">
                 <div class="col-12 col-lg-6">
-                    <strong class="secondary-font link-secondary">
+                    <strong class="secondary-font link-dark">
                         {{ blogpost.post_type }}
                     </strong>
                     <h1 class="fw-bold display-5 main-font mb-3">
@@ -37,7 +37,7 @@
                              alt="{{ blogpost.title }}">
                     {% endif %}
                 </div>
-                <div class="text-center">
+                <div class="text-center main-font pt-4">
                     <span class="badge bg-secondary">
                         {{ blogpost.category.name }}
                     </span>
