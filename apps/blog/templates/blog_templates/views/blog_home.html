@@ -5,56 +5,60 @@
     <div class="container">
 
         {% if spotlighted_post %}
-        <a href="{% url 'detail-blog-post' slug=spotlighted_post.slug %}" class="text-decoration-none">
-            <div class="p-4 p-md-5 mb-4 rounded text-dark core-bg-accent">
-                <div class="col-lg-6">
-                    <h1 class="main-font">
-                        {{ spotlighted_post.title }}
-                    </h1>
-                    <p class="main-font">
-                        by <strong>{{ spotlighted_post.author.first_name }} {{ spotlighted_post.author.last_name }}</strong>
-                    </p>
-                    <p class="main-font my-3">
-                        {{ spotlighted_post.meta_description }}
-                    </p>
+        <article>
+            <a href="{% url 'detail-blog-post' slug=spotlighted_post.slug %}" class="text-decoration-none">
+                <div class="p-4 p-md-5 mb-4 rounded text-dark core-bg-accent">
+                    <div class="col-lg-6">
+                        <header>
+                            <h1 class="main-font">{{ spotlighted_post.title }}</h1>
+                            <p class="main-font">
+                                by <strong>{{ spotlighted_post.author.first_name }} {{ spotlighted_post.author.last_name }}</strong>
+                            </p>
+                        </header>
+                        <p class="main-font my-3">{{ spotlighted_post.meta_description }}</p>
+                    </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        </article>
         {% endif %}
 
         <div class="row mb-2 h-100">
             {% for post in featured_posts %}
             <div class="col-md-6">
-                <a href="{% url 'detail-blog-post' slug=post.slug %}" class="text-decoration-none">
-                    <div class="row g-0 border rounded overflow-hidden mb-4 shadow-sm">
-                        {% if post.thumbnail %}
-                        <div class="col-5">
-                            <img src="{{ post.thumbnail.url }}" class="img-fluid w-100 h-100" alt="{{ post.title }}">
-                        </div>
-                        <div class="col-7 p-4 d-flex flex-column justify-content-between">
-                        {% else %}
-                        <div class="col p-4 d-flex flex-column justify-content-between">
-                        {% endif %}
-                            <div>
-                                <strong class="secondary-font link-secondary">
-                                    {{ post.post_type }}
-                                </strong>
-                                <h3 class="main-font fw-bold link-dark">
-                                    {{ post.title }}
-                                </h3>
-                                <div class="secondary-font link-dark">
-                                    {{ post.published_at|date:"F d, Y" }}
-                                </div>
+                <article>
+                    <a href="{% url 'detail-blog-post' slug=post.slug %}" class="text-decoration-none">
+                        <div class="row g-0 border rounded overflow-hidden mb-4 shadow-sm">
+                            {% if post.thumbnail %}
+                            <div class="col-5">
+                                <img src="{{ post.thumbnail.url }}" class="img-fluid w-100 h-100" alt="{{ post.title }}">
                             </div>
-                            <small class="pt-3">
-                                <span class="badge bg-secondary">{{ post.category.name }}</span>
-                                {% for topic in post.topics.all %}
-                                <span class="badge rounded-pill bg-secondary">{{ topic.name }}</span>
-                                {% endfor %}
-                            </small>
+                            <div class="col-7 p-4 d-flex flex-column justify-content-between">
+                            {% else %}
+                            <div class="col p-4 d-flex flex-column justify-content-between">
+                            {% endif %}
+                                <div>
+                                    <strong class="secondary-font link-secondary">
+                                        {{ post.post_type }}
+                                    </strong>
+                                    <header>
+                                        <h3 class="main-font fw-bold link-dark">{{ post.title }}</h3>
+                                    </header>
+                                    <div class="secondary-font link-dark">
+                                        {{ post.published_at|date:"F d, Y" }}
+                                    </div>
+                                </div>
+                                <footer>
+                                    <small class="pt-3">
+                                        <span class="badge bg-secondary">{{ post.category.name }}</span>
+                                        {% for topic in post.topics.all %}
+                                        <span class="badge rounded-pill bg-secondary">{{ topic.name }}</span>
+                                        {% endfor %}
+                                    </small>
+                                </footer>
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </article>
             </div>
             {% endfor %}
         </div>
@@ -66,18 +70,25 @@
                 </div>
                 {% for post in recent_posts %}
                 <article class="mb-4">
-                    <h2 class="main-font mb-1">
-                        <a href="{% url 'detail-blog-post' slug=post.slug %}" class="link-body-emphasis">{{ post.title }}</a>
-                    </h2>
-                    <p class="secondary-font mt-2">
-                        {{ post.published_at|date:"F d, Y" }} by <a href="{% url 'account-profile' username=post.author.username %}" class="main-font link-secondary">{{ post.author.first_name }} {{ post.author.last_name }}</a>
-                    </p>
-                    <p class="main-font text-secondary">{{ post.meta_description|truncatewords:30 }}</p>
+                    <header>
+                        <h2 class="main-font mb-1">
+                            <a href="{% url 'detail-blog-post' slug=post.slug %}" class="link-body-emphasis">{{ post.title }}</a>
+                        </h2>
+                        <p class="secondary-font mt-2">
+                            {{ post.published_at|date:"F d, Y" }} by 
+                            <a href="{% url 'account-profile' username=post.author.username %}" class="main-font link-secondary">
+                                {{ post.author.first_name }} {{ post.author.last_name }}
+                            </a>
+                        </p>
+                    </header>
+                    <section>
+                        <p class="main-font text-secondary">{{ post.meta_description|truncatewords:30 }}</p>
+                    </section>
                 </article>
                 {% endfor %}
             </div>
 
-            <div class="col-md-4">
+            <aside class="col-md-4">
                 <div class="position-sticky">
                     <div class="p-4 rounded core-bg-secondary">
                         <h4 class="text-white fst-italic main-font">Engilorians</h4>
@@ -119,7 +130,7 @@
                         </ol>
                     </div>
                 </div>
-            </div>
+            </aside>
         </div>
     </div>
 </section>
