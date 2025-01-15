@@ -1,4 +1,5 @@
 {% load static %}
+{% load tz %}
 
 <footer class="py-3 mt-4">
     <div class="container">
@@ -8,7 +9,7 @@
         </ul>
         <p class="main-font fw-bold text-center text-muted">
             <a href="{% url 'hub-home' %}" class="text-decoration-none text-muted">
-                &copy; 2024 Engilore
+                &copy; {% now "Y" %} Engilore
             </a>
         </p>
     </div>
