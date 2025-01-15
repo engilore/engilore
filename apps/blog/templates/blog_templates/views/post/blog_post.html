@@ -6,13 +6,15 @@
 
 {% block content %}
 <article class="min-vh-100">
-    <section class="px-4 py-5 core-bg-accent">
+    <header class="px-4 py-5 core-bg-accent">
         <div class="container col-xxl-8">
-            <header class="row align-items-center py-3">
+            <div class="row align-items-center py-3">
                 <div class="col-12 col-lg-6">
-                    <strong class="secondary-font link-dark">
-                        {{ blogpost.post_type }}
-                    </strong>
+                    <p class="mb-1">
+                        <strong class="secondary-font link-dark">
+                            {{ blogpost.post_type }}
+                        </strong>
+                    </p>
                     <h1 class="fw-bold display-5 main-font mb-3">
                         {{ blogpost.title }}
                     </h1>
@@ -47,14 +49,14 @@
                         </span>
                     {% endfor %}
                 </div>
-            </header>
+            </div>
         </div>
-    </section>
+    </header>
 
     <section class="py-5">
         <div class="container">
             <div class="main-font fs-5">
-                <p>{{ blogpost.content|linebreaks }}</p>
+                {{ blogpost.content|linebreaks }}
             </div>
         </div>
     </section>
